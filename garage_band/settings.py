@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
+    'portfolio',
 ]
 SITE_ID = 1
 
@@ -72,6 +74,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media'
             ],
         },
     },
@@ -161,3 +164,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
  }
+
+
+# ACCOUNT_SIGNUP_FORM_CLASS = 'portfolio.forms.CustomSignupForm'
+
+AUTH_USER_MODEL = 'portfolio.UserProfileModel'
+
