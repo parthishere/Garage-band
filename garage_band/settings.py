@@ -41,10 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    # 'django.contrib.gis',
 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'phonenumber_field',
+    
 
     'portfolio',
 ]
@@ -168,5 +171,5 @@ REST_FRAMEWORK = {
 
 # ACCOUNT_SIGNUP_FORM_CLASS = 'portfolio.forms.CustomSignupForm'
 
-AUTH_USER_MODEL = 'portfolio.UserProfileModel'
+# AUTH_USER_MODEL = 'portfolio.UserProfileModel'
 
