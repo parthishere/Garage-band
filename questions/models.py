@@ -7,11 +7,11 @@ class Questions(models.Model):
     question = models.TextField()
     image = models.ImageField(null=True,blank=True)
     slug = models.SlugField(unique=True,blank=True,null=True)
-    like = models.NumericField()
+    like = models.IntegerField()
     time =models.DateTimeField(auto_now_add=True)
 
-    def is_liked(self,*args,**kwargs,request):
-        if request.user is authenticated:
+    def is_liked(self,*args,**kwargs):
+        if self.request.user.is_authenticated:
             self.like += 1
             self.save(using=self._db)
         else:

@@ -147,7 +147,7 @@ MEDIA_URL = '/media/'
 
 
 LOGOUT_REDIRECT_URL = ''
-LOGIN_REDIRECT_URL = ''
+
 
 
 AUTHENTICATION_BACKENDS = (
@@ -159,7 +159,7 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
     
 )
-SITE_ID = 1
+
 
 
 REST_FRAMEWORK = {

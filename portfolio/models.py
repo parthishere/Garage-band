@@ -79,7 +79,7 @@ class UserProfileModel(models.Model):
 
     def __str__(self):
         ''' Representation of instances '''
-        return self.user.username
+        return self.user.email
 
     def get_absolute_url(self):
         """ Url methodes """
