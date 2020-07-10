@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     
 
     'portfolio',
+    'answers',
+    'questions',
 ]
 SITE_ID = 1
 
