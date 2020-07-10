@@ -7,7 +7,7 @@ from django.shortcuts import reverse
 from django.utils.text import slugify
 from django.db.models.signals import pre_save, post_save
 from phonenumber_field.modelfields import PhoneNumberField
-import datetime
+from django.utils import timezone
 # from django.contrib.gis.db import models
 
 
@@ -24,7 +24,7 @@ def unique_slug_generator(instance, new_slug=None):
     if new_slug is not None:
         slug = new_slug
     else:
-        slug = slugify(instance.title)
+        slug = slugify(instance.user.username)
 
     Klass = instance.__class__
     qs_exists = Klass.objects.filter(slug=slug).exists()
@@ -39,7 +39,7 @@ def unique_slug_generator(instance, new_slug=None):
 
 
 class UserProfileManager(models.Manager):
-    """ USer profile manager """
+    """ User profile manager """
     def create_or_get(self, request, user, email, password):
         """ creating user or getting user """
         new_obj = False
@@ -61,7 +61,7 @@ class UserProfileModel(models.Model):
     """ User Profile Model """
     user        = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     followers   = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following_user' ,null=True, blank=True)
-    dob         = models.DateField(null=True, blank=True, default=datetime.datetime.now())
+    dob         = models.DateField(null=True, blank=True, default=timezone.now())
     phone_no    = PhoneNumberField(null=True, blank=True)
     profession  = models.TextField(max_length=100, null=True, blank=True)
     softwear    = models.TextField(max_length=100,null=True, blank=True)
@@ -95,65 +95,4 @@ def product_pre_save_receiver(sender, instance, *args, **kwargs):
 pre_save.connect(product_pre_save_receiver, sender=UserProfileModel)
     
 
-
-# Create your models here.
-# class UserProfileManager(BaseUserManager):
-#     """ User profile manager """
-
-#     def create_user(self, email, password, date_of_birth, username):
-#         """ function for creation users """
-#         if not email:
-#             raise ValueError("Somthing is Wrong With Email !")
-#         user_instance = self.model(
-#             email=UserProfileManager.normalize_email(email),
-#             date_of_birth=date_of_birth,
-#             username=username,
-#         )
-#         user_instance.set_password(password)
-#         user_instance.save(using=self._db)
-#         return user_instance
-    
-#     def create_superuser(self, email, password, date_of_birth, username):
-#         if not email:
-#             raise ValueError("Somthing is Wrong With Email !")
-#         user_instance = self.model(
-#             email=UserProfileManager.normalize_email(email),
-#             date_of_birth=date_of_birth,
-#             username=username,
-#         )
-#         user_instance.set_password(password)
-#         user_instance.is_admin = True
-#         user_instance.is_staff = True
-#         user_instance.save(using=self._db)
-#         return user_instance
-
-
-# class UserProfileModel(AbstractBaseUser):
-#     """ User Profile Model """
-#     email = models.EmailField(
-#         verbose_name='email address',
-#         max_length=255,
-#         unique=True
-#         )
-#     username = models.CharField(max_length=100)
-#     date_of_birth = models.DateField(null=True, blank=True)
-#     is_active = models.BooleanField(default=True)
-#     is_admin = models.BooleanField(default=False)
-
-#     objects = UserProfileManager()
-
-#     USERNAME_FIELD = 'email'
-#     REQUIRED_FIELD = ('username',)
-
-#     def get_full_name(self):
-#         """ Get Full Name """
-#         return self.username
-    
-#     def __str__(self):
-#         return f'email = {self.email}  username = {self.username}'
-
-#     @property
-#     def is_staff(self):
-#         "Is the user a member of staff?"
-#         return self.is_admin
 

@@ -23,5 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('allauth.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('home/', include('portfolio.urls'))
+    path('home/', include('portfolio.urls', namespace='portfolio'))
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TAMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
-
+print(BASE_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -71,7 +71,7 @@ ROOT_URLCONF = 'garage_band.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TAMPLATE_DIR, ],
+        'DIRS': [TAMPLATE_DIR,],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'garage_band.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': 'C:/Users/parth/GarageBand/Project/Garage-band/db.sqlite3'
     }
 }
 
@@ -171,7 +171,4 @@ REST_FRAMEWORK = {
  }
 
 
-# ACCOUNT_SIGNUP_FORM_CLASS = 'portfolio.forms.CustomSignupForm'
-
-# AUTH_USER_MODEL = 'portfolio.UserProfileModel'
 
