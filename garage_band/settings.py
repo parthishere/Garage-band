@@ -40,18 +40,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
     # 'django.contrib.gis',
-
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
     'phonenumber_field',
-    
 
     'portfolio',
     'answers',
     'questions',
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    
+    
+
+    
 ]
 SITE_ID = 1
 
@@ -71,7 +74,7 @@ ROOT_URLCONF = 'garage_band.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TAMPLATE_DIR,],
+        'DIRS': [TAMPLATE_DIR, os.path.join(BASE_DIR, 'templates', 'account')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

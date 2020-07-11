@@ -5,5 +5,5 @@ from . import views
 app_name = 'portfoilo'
 
 urlpatterns = [
-    path('', views.HomeView, name='home-page'),
+    path('profile/', views.HomeView, name='home-page'),
 ]

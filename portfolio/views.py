@@ -1,4 +1,5 @@
 from django.shortcuts import render, reverse, redirect, HttpResponse
+from django.contrib.auth.decorators import login_required
 
 from .models import UserProfileModel
 
@@ -22,7 +23,10 @@ def HomeView(request):
             return render(request, '/portfolio/portfolio.html', context=context)
     else:
         return redirect('account_login')
-            
-             
+
+@login_required        
+def add_followers_view(request):
+    pass
+
         
         

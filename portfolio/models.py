@@ -3,7 +3,7 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 from django.contrib.auth.models import User
-from django.shortcuts import reverse
+from django.shortcuts import reverse, redirect
 from django.utils.text import slugify
 from django.db.models.signals import pre_save, post_save
 from phonenumber_field.modelfields import PhoneNumberField
@@ -54,13 +54,31 @@ class UserProfileManager(models.Manager):
             new_obj=True
             self.request.session['user'] = user.id  
             return user, new_obj      
+    
+
+    def add_follower(self, request, instance, pk=None):
+        """ Pk is requested following user's primary key and instance is you as a user(who sent follow request) instance, So don't get confused """
+        if request.user.is_authenticated:
+            requested_user = self.model.objects.get(pk=pk)
+            following = False
+            if instance in requested_user.followers:
+                following = True
+            else:
+                requested_user.followers.add(instance)
+                instance.following.add(requested_user)
+        else:
+            return redirect('accounts_login')
+
+
+
         
 
 
 class UserProfileModel(models.Model):
     """ User Profile Model """
     user        = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    followers   = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following_user' ,null=True, blank=True)
+    followers   = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers' ,null=True, blank=True)
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following_users' ,null=True, blank=True)
     dob         = models.DateField(null=True, blank=True, default=timezone.now())
     phone_no    = PhoneNumberField(null=True, blank=True)
     profession  = models.TextField(max_length=100, null=True, blank=True)
