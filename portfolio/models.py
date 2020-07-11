@@ -56,18 +56,19 @@ class UserProfileManager(models.Manager):
             return user, new_obj      
     
 
-    def add_follower(self, request, instance, pk=None):
-        """ Pk is requested following user's primary key and instance is you as a user(who sent follow request) instance, So don't get confused """
-        if request.user.is_authenticated:
-            requested_user = self.model.objects.get(pk=pk)
-            following = False
-            if instance in requested_user.followers:
-                following = True
-            else:
-                requested_user.followers.add(instance)
-                instance.following.add(requested_user)
-        else:
-            return redirect('accounts_login')
+    # def add_follower(self, request, instance, pk=None):
+    #     
+    #     if request.user.is_authenticated:
+    #         requested_user = self.model.objects.get(pk=pk)
+    #         following = False
+    #         if instance in requested_user.followers:
+    #             following = True
+    #         else:
+    #             requested_user.followers.add(instance)
+    #             instance.following.add(requested_user)
+    #             instance.save()
+    #     else:
+    #         return redirect('accounts_login')
 
 
 
@@ -76,20 +77,20 @@ class UserProfileManager(models.Manager):
 
 class UserProfileModel(models.Model):
     """ User Profile Model """
-    user        = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    followers   = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers' ,null=True, blank=True)
-    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following_users' ,null=True, blank=True)
-    dob         = models.DateField(null=True, blank=True, default=timezone.now())
-    phone_no    = PhoneNumberField(null=True, blank=True)
-    profession  = models.TextField(max_length=100, null=True, blank=True)
-    softwear    = models.TextField(max_length=100,null=True, blank=True)
-    about       = models.TextField(max_length=500,null=True, blank=True)
-    image       = models.ImageField(upload_to='profiles/',null=True, blank=True)
-    photography = models.ImageField(upload_to='work_photos/', validators=[validate_image_file_extension],null=True, blank=True)
-    music       = models.FileField(upload_to='work_music/'  ,validators=[validate_music_file_extension],null=True, blank=True)
-    video       = models.FileField(upload_to='work_video/'  ,validators=[validate_video_file_extension],null=True, blank=True)
-    awards      = models.TextField(null=True, blank=True)
-    slug        = models.SlugField(null=True, blank=True)
+    user            = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name="user")
+    followers       = models.ManyToManyField('self', related_name='followers' , blank=True, symmetrical=False)
+    following_user  = models.ManyToManyField('self', related_name='following_users' , blank=True, symmetrical=False)
+    dob             = models.DateField(null=True, blank=True, default=timezone.now())
+    phone_no        = PhoneNumberField(null=True, blank=True)
+    profession      = models.TextField(max_length=100, null=True, blank=True)
+    softwear        = models.TextField(max_length=100,null=True, blank=True)
+    about           = models.TextField(max_length=500,null=True, blank=True)
+    image           = models.ImageField(upload_to='profiles/', null=True, blank=True)
+    photography     = models.ImageField(upload_to='work_photos/', validators=[validate_image_file_extension],null=True, blank=True)
+    music           = models.FileField(upload_to='work_music/'  ,validators=[validate_music_file_extension],null=True, blank=True)
+    video           = models.FileField(upload_to='work_video/'  ,validators=[validate_video_file_extension],null=True, blank=True)
+    awards          = models.TextField(null=True, blank=True)
+    slug            = models.SlugField(null=True, blank=True)
     # location = models.PointField()
 
 
@@ -101,7 +102,10 @@ class UserProfileModel(models.Model):
 
     def get_absolute_url(self):
         """ Url methodes """
-        return reverse('/')
+        return reverse('portfolio:profile-detail-cbv', kwargs={'slug':self.slug})
+    
+    def get_featured_profile(self):
+        return UserProfileModel.objects.first()
 
 
 

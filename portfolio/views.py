@@ -1,7 +1,10 @@
 from django.shortcuts import render, reverse, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, DetailView
+from django.db.models import Q
 
 from .models import UserProfileModel
+
 
 # Create your views here.
 def HomeView(request):
@@ -25,8 +28,48 @@ def HomeView(request):
         return redirect('account_login')
 
 @login_required        
-def add_followers_view(request):
-    pass
+def add_followers_view(request, pk):
+    """ Pk is requested following user's primary key and instance is you as a user(who sent follow request) instance, So don't get confused """
+    if request.user.is_authenticated:
+        requested_user = UserProfileModel.objects.get(pk=pk)
+        user = UserProfileModel.objects.get(user=request.user)
+        following = False
+        
+        if request.user in requested_user.followers:
+            following = True
+        else:
+            requested_user.followers.add(user.get_profile())
+            user.following.add(requested_user.get_profile())
+            requested_user.save()
+            user.save()
+    else:
+        return redirect('accounts_login')
+    
 
+
+
+# Create your views here.
+class SearchProfileView(ListView):
+    template_name = 'portfolio/search-list.html'
+    model=UserProfileModel
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        request = self.request
+        query = request.GET.get('q')
+        
+        if query is not None:
+            obj_list = (
+                Q(user__username__icontains=query) | Q(about__icontains=query) | Q(profession__icontains=query) | Q(softwear__icontains=query) | Q(awards__icontains=query)
+            )
+            context['object_list'] = UserProfileModel.objects.filter(obj_list).distinct()
+            context['query'] = query
+            return context
+        else:
+            return UserProfileModel.get_featured_profile()
+
+class ProfileDetailView(DetailView):
+    model=UserProfileModel
+    template_name= 'portfolio/profile-detail.html'
         
         

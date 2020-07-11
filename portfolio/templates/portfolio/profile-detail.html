@@ -1,0 +1,9 @@
+{{ object.id }}
+<form method='POST'>
+{% csrf_token %}
+{% if request.user in object.followers %}
+unfollow
+{% else %}
+<a href="{% url 'portfoilo:add_follower' object.pk %}"">Follow</a>
+{% endif %}
+</form>
