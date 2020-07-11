@@ -1,0 +1,19 @@
+   <!DOCTYPE html>
+   <html lang="en" dir="ltr">
+     <head>
+       <meta charset="utf-8">
+       <title></title>
+     </head>
+     <body>
+       <div class="">
+        {% if request.GET.q %}
+          results for {{ request.GET.q }}
+       </div>
+       {% else %}
+         <div class="mx-auto py-4 col-12 col-md-8 ">
+           {% include 'search/search_form.html' %}
+         </div><hr>
+       {% endif %}
+
+     </body>
+   </html>
