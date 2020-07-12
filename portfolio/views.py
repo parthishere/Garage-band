@@ -2,6 +2,8 @@ from django.shortcuts import render, reverse, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
+# from actstream.actions import follow, unfollow
+
 
 from .models import UserProfileModel
 
@@ -30,20 +32,19 @@ def HomeView(request):
 @login_required        
 def add_followers_view(request, pk):
     """ Pk is requested following user's primary key and instance is you as a user(who sent follow request) instance, So don't get confused """
-    if request.user.is_authenticated:
-        requested_user = UserProfileModel.objects.get(pk=pk)
-        user = UserProfileModel.objects.get(user=request.user)
-        following = False
-        
-        if request.user in requested_user.followers:
-            following = True
-        else:
-            requested_user.followers.add(user.get_profile())
-            user.following.add(requested_user.get_profile())
-            requested_user.save()
-            user.save()
-    else:
-        return redirect('accounts_login')
+    # if request.user.is_authenticated:
+        # requested_user = UserProfileModel.objects.get(pk=pk)
+        # requested_user = requested_user.user
+        # user = UserProfileModel.objects.get(user=request.user)
+        # user = user.user
+        # following = False
+        # if True:
+        #     requested_user.followers.add(UserProfileModel(following = user)
+        #     user.following.add(UserProfileModel(follower = user)
+        #     requested_user.save()
+        #     user.save()
+    # else:
+    #     return redirect('accounts_login')
     
 
 

@@ -24,5 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('allauth.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('accounts/', include('portfolio.urls', namespace='portfolio'))
+    path('accounts/', include('portfolio.urls', namespace='portfolio')),
+    path('ask-question/', include('questions.urls', namespace='questions')),
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/registration/', include('rest_auth.registration.urls'))
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

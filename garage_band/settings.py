@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'django.contrib.gis',
     'phonenumber_field',
+    'rest_auth.registration',
 
     'portfolio',
     'answers',

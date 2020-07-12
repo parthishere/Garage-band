@@ -78,8 +78,8 @@ class UserProfileManager(models.Manager):
 class UserProfileModel(models.Model):
     """ User Profile Model """
     user            = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name="user")
-    followers       = models.ManyToManyField('self', related_name='followers' , blank=True, symmetrical=False)
-    following_user  = models.ManyToManyField('self', related_name='following_users' , blank=True, symmetrical=False)
+    # followers       = models.ManyToManyField('self', related_name='followers' , blank=True, symmetrical=False)
+    # following_user  = models.ManyToManyField('self', related_name='following_users' , blank=True, symmetrical=False)
     dob             = models.DateField(null=True, blank=True, default=timezone.now())
     phone_no        = PhoneNumberField(null=True, blank=True)
     profession      = models.TextField(max_length=100, null=True, blank=True)
@@ -91,10 +91,15 @@ class UserProfileModel(models.Model):
     video           = models.FileField(upload_to='work_video/'  ,validators=[validate_video_file_extension],null=True, blank=True)
     awards          = models.TextField(null=True, blank=True)
     slug            = models.SlugField(null=True, blank=True)
+    follower        = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE, null=True)
+    following       = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE, null=True)
     # location = models.PointField()
 
-
     objects = UserProfileManager()
+
+    class Meta:
+        unique_together = ('follower', 'following')
+    
 
     def __str__(self):
         ''' Representation of instances '''
