@@ -1,7 +1,12 @@
 from django.forms import forms
-from .models import Answers
+from .models import Answers,Comment
 
-class PostAnswerForm(forms.ModelForm):
+class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answers
-        exclude = ['user', 'question_id', 'like	']
+        fields = ['answer','image']
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment']

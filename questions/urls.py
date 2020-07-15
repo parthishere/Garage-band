@@ -1,16 +1,11 @@
-from rest_framework import routers
-from .api import LinkraViewSet
-from .views import QuestionCreate
+from django.urls import path
 
-app_name='questions'
-
-router = routers.DefaultRouter()
-router.register('api/Linkra',LinkraViewSet,'Linkra')
-
+from . import views
+app_name = 'question'
 
 urlpatterns = [
-	path('', QuestionCreate.as_view(), name='ask-question')
+    path('', views.QuestionListView.as_view(), name='questions'),
+	path('question/add/', views.QuestionCreate.as_view(), name='question-add'),
+    path('question/<slug>', views.QuestionDetailView.as_view(), name='question-detail'),
+
 ]
-
-urlpatterns += router.urls
-

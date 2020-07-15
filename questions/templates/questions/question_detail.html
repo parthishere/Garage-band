@@ -1,18 +1,101 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    <div class="content">
-      <h1>{{question.question}}</h1>
-      {% include '' with %}
+
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-left: 5px;" class="row text-info">
+    <h3>Que: {{ question.question }} </h3>
+</div>
+
+  <div class="text-success">
+    <div class="row">
+        <div class="col">
+          <form action = "{{answer_url}}" method = "GET" >
+            <input type = "hidden" name = "q_id" value = {{q_id}} />
+            <input type ="submit"  class="btn btn-success" role="button" value="Answer this question">
+          </form>
+        </div>
+        <div class="col-5"></div>
+        <div class="col">
+          <strong>user:</strong> <a href="{{ question.user.get_absolute_url }}">{{ question.user }}</a>
+          <br>
+          <strong>Created On:</strong> {{ question.time }}
+        </div>
     </div>
-    <!-- {% if form.is_valid %}
-      <form method="POST">
-        {{ AnswerForm }} -->
-      <!-- </form>include -->
-  </body>
-</html>
-© 2020 GitHub, Inc.
+
+  <div style="margin-left:20px;margin-top:10px; margin-right: 10px;">
+
+    {% if answer_list %}
+    <ul>
+        <h4>All Answers</h4>
+      {% for answer in answer_list %}
+          <br>
+          <div class="card">
+            <div class="card-body">
+              {% comment %} <h5 class="card-title">Special title treatment</h5> {% endcomment %}
+              <p class="card-text">
+                <div class="row text-dark">
+            {{ answer.answer }}
+          </div>
+          <br>
+          <br>
+          <div class="row text-success">
+
+            <!-- upvote form -->
+              <div class="col">
+                <form action="{{upvote_url}}{{answer.id}}" method="POST">
+                  {% csrf_token %}
+                  <input type="submit" value="Upvote" class="btn btn-primary">
+                  <span class="text-dark">{{ answer.upvote }}</span>
+                </form>
+              </div>
+
+            <!-- downvote form -->
+            <div class="col">
+                <form action="{{downvote_url}}{{answer.id}}" method="POST">
+                  {% csrf_token %}
+                  <input type="submit" value="Downvote" class="btn btn-primary">
+                  <span class="text-dark">{{ answer.downvote }}</span>
+                </form>
+              </div>
+
+
+            <!-- comment form -->
+            <div class="col">
+                <form action="/answer/{{answer.id}}/comment/" method="GET">
+                  {% csrf_token %}
+                  <input type="submit" value="Comment" class="btn btn-primary">
+                </form>
+            </div>
+
+            </div>
+          </div>
+ </div>
+
+ <div style="margin-left: 20px;">
+        <br>
+        <ul class="list-group">
+          {% for key, comment in comment_dictionary.items %}
+            {% if key == answer.id %}
+              {% if comment %}
+                {% for comm in comment %}
+
+                    <li class="list-group-item disabled">{{ comm }}</li>
+
+                {% endfor %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        <ul>
+        </div>
+      {% endfor %}
+    </ul>
+    {% else %}
+
+    <div class="text-danger">
+        There are no answers for this question.
+    </div>
+
+    {% endif %}
+
+  </div>
+{% endblock %}

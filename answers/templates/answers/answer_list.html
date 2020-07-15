@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>answer List</h1>
+  {% if answer_list %}
+  <ul>
+
+    {% for answer in answer_list %}
+      <div class="row text-info">
+         {{ answer.question.question }}
+      </div>
+          <hr></hr>
+        <div class="row text-dark">
+          {{ answer.answer }}
+        </div>
+        <br>
+        <br>
+        <div class="row text-success">
+            <div class="col"></div>
+            <div class="col-6"></div>
+            <div class="col">
+                by <a href="{{ answer.user.get_absolute_url }}">{{answer.user}} </a>
+            </div>
+        </div>
+
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no answers in the library.</p>
+  {% endif %}
+{% endblock %}

@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
-
+from django.views.generic import RedirectView
 
 
 urlpatterns = [
@@ -27,5 +27,9 @@ urlpatterns = [
     path('accounts/', include('portfolio.urls', namespace='portfolio')),
     path('ask-question/', include('questions.urls', namespace='questions')),
     path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/registration/', include('rest_auth.registration.urls'))
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('question/', include('question.urls')),
+    path('answer/', include('answer.urls')),
+    path('', RedirectView.as_view(url='/question/')),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,20 +1,25 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-     <h1> Q and A list </h1>
-     <div class="content">
-       {% for question in questions %}
-       <a href="/questions/{{ question.question_id }}/{{ question.slug }}">{{ question.question }}</a>
-       <p>
-         {% if question.image %}
-            <img src="{{ question.image.url }}" class="img-fluid"/>
-         {% endif %}
-       </p>
-       {% endfor %}
-     </div>
-  </body>
-</html>
+
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Question List</h1>
+  {% if question_list %}
+  <ul class="list-group">
+    {% for question in question_list %}
+      <li style="padding: 4px; margin: 3px; list-style: none; text-decoration: none;" class="list-group-item list-group-item-action list-group-item-dark">
+        <a style="text-decoration: none; color: black" href="{{ question.get_absolute_url }}">{{ question.question }}</a>
+        &nbsp; &nbsp; &nbsp;
+        by
+        <a style="text-decoration: none; color: black;" href="{{ question.user.get_absolute_url }}"> {{question.user}} </a>
+      </li>
+      <li>
+          {% if question.image %}
+             <img src="{{ question.image.url }}" class="img-fluid"/>
+          {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no questions in the library.</p>
+  {% endif %}
+{% endblock %}
