@@ -80,3 +80,30 @@ class QuestionDetailView(DetailView, FormView):
         # else:
         #     raise AttributeError("pk not found in url")
     
+
+class UpvoteCreate(LoginRequiredMixin, CreateView):
+    model = Answers
+    fields = ['answer', 'answer_id', 'upvote']
+
+    def post(self, request, *args, **kwargs):
+        answer_id = self.kwargs['slug']
+        answer = Answers.objects.get(id=answer_id)
+        answer.upvote += 1
+        answer.save()
+        response = redirect(
+            reverse('question-detail', kwargs={'pk': answer.question.id}))
+        return response
+
+
+class DownvoteCreate(LoginRequiredMixin, CreateView):
+    model = Answers
+    fields = ['answer', 'answer_id', 'downvote']
+
+    def post(self, request, *args, **kwargs):
+        answer_id = self.kwargs['slug']
+        answer = Answers.objects.get(id=answer_id)
+        answer.downvote += 1
+        answer.save()
+        response = redirect(
+            reverse('question-detail', kwargs={'slug': answer.question_id.id}))
+        return response
