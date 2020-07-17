@@ -8,7 +8,34 @@
   {{ form }}
   <input type='submit' name='submit' value='submit' class='btn btn-primary'>
   </form>
+ <h1>answer List</h1>
 
+  {% if answers %}
+  <ul>
+
+    {% for answer in answers %}
+      <div class="row text-info">
+         {{ answer.question.question }}
+      </div>
+          <hr></hr>
+        <div class="row text-dark">
+          {{ answer.answer }}
+        </div>
+        <br>
+        <br>
+        <div class="row text-success">
+            <div class="col"></div>
+            <div class="col-6"></div>
+            <div class="col">
+                by <a href="{{ answer.user.get_absolute_url }}">{{answer.user}} </a>
+            </div>
+        </div>
+
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no answers in the library.</p>
+  {% endif %}
 
 {% endblock %}
 © 2020 GitHub, Inc.
