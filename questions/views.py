@@ -1,44 +1,82 @@
 from django.shortcuts import render, redirect, reverse
-from django.views.generic import CreateView, View
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, View, ListView, DetailView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import QuestionForm
+
+from .forms import QuestionForm
+from .models import Questions
+from answers.models import Answers
+from portfolio.models import UserProfileModel
 from answers.forms import PostAnswerForm 
 
+
 # Create your views here.
-class QuestionCreate(LoginRequiredMixin, CreateView):
-    model = QuestionForm
-    exclude = ['user']
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
 
 
-def question_detail_view(request, slug):
-	question = Question.objects.get(slug=slug)
-	question_id = question.pk
-	ans_form = PostAnswerForm(request.POST or None)
-	ans_form.cleaned_data.get(question_id) = question_id
-	if request.POST:
-		if ans_form.is_valid():
-			ans_form.save()
-			return redirect('question-detail' slug=slug)
-
-def QuestionDetailView(View):
-	template_name = 'question-detail.html'
-	form_class = PostAnswerForm
-
-	def get(self, request, *args, **kwargs):
+class QuestionCreate(LoginRequiredMixin, FormView):
+    form_class = QuestionForm
+    template_name = 'questions/ask-question.html'
+    
+    def get(self, request, *args, **kwargs):
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
-           
         form = self.form_class(request.POST)
-        form.instance.question_id = request.GET.get('question_id')
+        form.instance.user = request.user
+        # instance_user = UserProfileModel.objects.get(user=request.user)
+        # form.instance.user = request.user
         if form.is_valid():
             form.save()
-            return redirect(reverse('myapp:index'))
-    def get_context_data(self, *args, **kwargs):
-    	super().get_context_data(*args, **kwargs)
+            return reverse('questions:question-list')
+        else:
+            return reverse('questions:question-detail')
+
+    # def get_success_url(self):
+    #     return reverse_lazy('questions:question-list')
+
+
+class QuestionListView(ListView):
+    model = Questions
+    template_name = 'questions/question-list.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(QuestionListView, self).get_context_data(**kwargs)
+        context['objects_list'] = Questions.objects.all()
+        return context
+
+
+class QuestionDetailView(DetailView, FormView):
+    template_name = 'questions/question-detail.html'
+    model = Questions
+    form_class = PostAnswerForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        if pk is None: 
+            pk = request.GET.get('pk')  
+        form = self.form_class(request.POST)
+        form.instance.question_id = request.GET.get('pk')
+        # instance_user = UserProfileModel.objects.get(user=request.user)
+        form.instance.user = request.user
+        if form.is_valid():
+            form.save()
+            return reverse('questions:question-detail', kwargs={'pk': pk})
+        else:
+            return reverse('questions:question-detail', kwargs={'pk': pk})
+
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs.get('pk')
+        
+        context = super(QuestionDetailView, self).get_context_data(**kwargs)
+        context['form'] = self.get_form()
+        context['answers'] = Answers.objects.filter(question_id=pk)
+        return context
+        # else:
+        #     raise AttributeError("pk not found in url")
+    

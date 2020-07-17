@@ -29,9 +29,9 @@ def HomeView(request):
     else:
         return redirect('account_login')
 
-@login_required        
-def add_followers_view(request, pk):
-    """ Pk is requested following user's primary key and instance is you as a user(who sent follow request) instance, So don't get confused """
+# @login_required        
+# def add_followers_view(request, pk):
+#     """ Pk is requested following user's primary key and instance is you as a user(who sent follow request) instance, So don't get confused """
     # if request.user.is_authenticated:
         # requested_user = UserProfileModel.objects.get(pk=pk)
         # requested_user = requested_user.user

@@ -1,0 +1,14 @@
+{% extends 'base/base.html' %}
+{% block body_block %}
+     <div class="content">
+     {{ objects_list }}
+       {% for question in objects_list %}
+       <a href="{% url 'questions:question-detail' question.pk %}">{{ question.question }}</a>
+       <p>
+         {% if question.image %}
+            <img src="{{ question.image.url }}" class="img-fluid"/>
+         {% endif %}
+       </p>
+       {% endfor %}
+     </div>
+{% endblock %}

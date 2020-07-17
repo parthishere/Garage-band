@@ -1,9 +1,14 @@
-{{ object.id }}
+{% extends 'base/base.html' %}
+
+{% block body_block %}
+
+
 <form method='POST'>
 {% csrf_token %}
 {% if request.user in object.followers %}
 unfollow
 {% else %}
-<a href="{% url 'portfoilo:add_follower' object.pk %}"">Follow</a>
+{% comment %} <a href="{% url 'portfoilo:add_follower' object.pk %}">Follow</a> {% endcomment %}
 {% endif %}
 </form>
+{% endblock %}

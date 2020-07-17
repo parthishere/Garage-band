@@ -15,6 +15,11 @@ from .validators import validate_image_file_extension, validate_music_file_exten
 from .utils import random_string_generator
 
 
+TAG_CHOICES = [
+    ('EN', 'Entertainment'), 
+]
+
+
 
 def unique_slug_generator(instance, new_slug=None):
     """
@@ -93,6 +98,8 @@ class UserProfileModel(models.Model):
     slug            = models.SlugField(null=True, blank=True)
     follower        = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE, null=True)
     following       = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE, null=True)
+    tags            = models.CharField(choices=TAG_CHOICES, default='EN', max_length=3)
+    # tag             = models.CharField(choices=TAG_CHOICES, max_length='2', null=True, blank=True)
     # location = models.PointField()
 
     objects = UserProfileManager()

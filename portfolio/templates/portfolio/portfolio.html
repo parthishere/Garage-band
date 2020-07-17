@@ -1,10 +1,14 @@
 {% extends 'base/base.html' %}
 
 {% block body_block %}
+{{ user }}</br>
 
-{{ user }}
-
-{{ user.email }}
+{% for obj in user %}
+{{ obj.email }}</br>
+{{ obj.user }}</br>
+{{ obj.user.email }}</br>
+{{ obj.about }}
+{% endfor %}
 
 
 {% endblock %}

@@ -10,7 +10,7 @@ def unique_slug_generator(instance, new_slug=None):
     if new_slug is not None:
         slug = new_slug
     else:
-        slug = slugify(instance.title)
+        slug = slugify(instance.question)
     klass = instance.__class__
     qs_exists = klass.objects.filter(slug=slug).exists()
     if qs_exists:
