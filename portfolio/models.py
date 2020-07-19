@@ -83,8 +83,8 @@ class UserProfileManager(models.Manager):
 class UserProfileModel(models.Model):
     """ User Profile Model """
     user            = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name="user")
-    # followers       = models.ManyToManyField('self', related_name='followers' , blank=True, symmetrical=False)
-    # following_user  = models.ManyToManyField('self', related_name='following_users' , blank=True, symmetrical=False)
+    followers       = models.ManyToManyField(User , related_name='followers_of_instance' , blank=True,)
+    
     dob             = models.DateField(null=True, blank=True, default=timezone.now())
     phone_no        = PhoneNumberField(null=True, blank=True)
     profession      = models.TextField(max_length=100, null=True, blank=True)
@@ -130,3 +130,8 @@ pre_save.connect(product_pre_save_receiver, sender=UserProfileModel)
     
 
 
+def user_post_save_reciever(sender, instance, created, *args, **kwargs):
+    if created:
+        UserProfileModel.objects.get_or_create(user=instance)
+
+post_save.connect(user_post_save_reciever, sender=User)

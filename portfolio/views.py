@@ -6,50 +6,48 @@ from django.db.models import Q
 
 
 from .models import UserProfileModel
+from questions.models import Questions
 
 
 # Create your views here.
 def HomeView(request):
     """ HOME VIEW FOR PORTFOIO PAGE """
-    if request.user.is_authenticated:
-        user_instance = UserProfileModel.objects.filter(user=request.user)
-        # session_id = request.session.get('user_id'==request.user.id)
-        if user_instance.exists():
-            context = {
-                'user': user_instance,
-            }
-            return render(request, 'portfolio/portfolio.html', context=context)
-        else:
-            user_instance = UserProfileModel.objects.create(user=request.user)
-            request.session['user_id'] = request.user.id
-            context = {
-                'user': user_instance,
-            }
-            return render(request, '/portfolio/portfolio.html', context=context)
-    else:
-        return redirect('account_login')
-
-# @login_required        
-# def add_followers_view(request, pk):
-#     """ Pk is requested following user's primary key and instance is you as a user(who sent follow request) instance, So don't get confused """
+    qs = Questions.objects.filter(user=request.user)
+    context = {
+        'qs': qs,
+    }
     # if request.user.is_authenticated:
-        # requested_user = UserProfileModel.objects.get(pk=pk)
-        # requested_user = requested_user.user
-        # user = UserProfileModel.objects.get(user=request.user)
-        # user = user.user
-        # following = False
-        # if True:
-        #     requested_user.followers.add(UserProfileModel(following = user)
-        #     user.following.add(UserProfileModel(follower = user)
-        #     requested_user.save()
-        #     user.save()
+    #     user_instance = UserProfileModel.objects.filter(user=request.user)
+    #     # session_id = request.session.get('user_id'==request.user.id)
+    #     if user_instance.exists():
+    #         context = {
+    #             'user': user_instance,
+    #         }
+    #         return render(request, 'portfolio/portfolio.html', context=context)
+    #     else:
+    #         user_instance = UserProfileModel.objects.create(user=request.user)
+    #         request.session['user_id'] = request.user.id
+    #         context = {
+    #             'user': user_instance,
+    #         }
+    #         return render(request, '/portfolio/portfolio.html', context=context)
     # else:
-    #     return redirect('accounts_login')
+    #     return redirect('account_login')
+    return render(request, 'portfoilo/portfoilo.html', context)
+
+
+
+@login_required        
+def add_followers_view(request, pk):
+    """ Pk is requested following user's primary key and instance is you as a user(who sent follow request) instance, So don't get confused """
+    requested_user = UserProfileModel.objects.get(pk=pk)
+    user = UserProfileModel.objects.get(user=request.user)
+    requested_user.following.add(user)
+    requested_user.save()
+    return reverse('portfolio:profile-detail', kwargs={'pk': pk})
     
 
 
-
-# Create your views here.
 class SearchProfileView(ListView):
     template_name = 'portfolio/search-list.html'
     model=UserProfileModel
@@ -68,6 +66,8 @@ class SearchProfileView(ListView):
             return context
         else:
             return UserProfileModel.get_featured_profile()
+
+
 
 class ProfileDetailView(DetailView):
     model=UserProfileModel
