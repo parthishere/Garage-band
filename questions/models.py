@@ -5,6 +5,16 @@ from portfolio.models import UserProfileModel
 from django.urls import reverse
 
 # Create your models here.
+ALL_CHOICES = [
+  ('VE','VIDEO EDITING'),
+  ('PE','PHOTO EDITING'),
+  ('C','COLORING'),
+  ('V','VFX'),
+  ('CG','CINEMETOGRAPHY'),
+  ('W','WRITING'),
+  ('CW','CONTENT WRITING'),
+]
+
 class Questions(models.Model):
     """ Question Model """
     question    = models.TextField(max_length=1000, help_text='Enter your question in brief')
@@ -12,6 +22,8 @@ class Questions(models.Model):
     image       = models.ImageField(null=True,blank=True)
     slug        = models.SlugField(unique=True,blank=True,null=True)
     time        = models.DateTimeField(auto_now_add=True)
+    tag         = models.CharField(choices = ALL_CHOICES,max_length=3)
+
 
     def get_absolute_url(self):
         """Returns the url to access a particular question and its answer."""

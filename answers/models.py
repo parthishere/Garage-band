@@ -10,7 +10,7 @@ class Answers(models.Model):
     answer = models.TextField(max_length=2000, help_text='Write your answer here...')
     image = models.ImageField(null=True,blank=True)
     slug = models.SlugField(unique=True,blank=True,null=True)
-    question_id = models.ForeignKey(Questions, on_delete=models.CASCADE, null=True)
+    question = models.ForeignKey(Questions, on_delete=models.CASCADE, null=True)
     upvote = models.IntegerField(default=0)
     downvote = models.IntegerField(default=0)
     views = models.IntegerField(default=0)

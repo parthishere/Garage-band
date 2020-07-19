@@ -14,11 +14,19 @@ from django.utils import timezone
 from .validators import validate_image_file_extension, validate_music_file_extension, validate_video_file_extension
 from .utils import random_string_generator
 
-
+ALL_CHOICES = [
+  ('VE','VIDEO EDITING'),
+  ('PE','PHOTO EDITING'),
+  ('C','COLORING'),
+  ('V','VFX'),
+  ('CG','CINEMETOGRAPHY'),
+  ('W','WRITING'),
+  ('CW','CONTENT WRITING'),
+]
 
 def unique_slug_generator(instance, new_slug=None):
     """
-    This is for a Django project and it assumes your instance 
+    This is for a Django project and it assumes your instance
     has a model with a slug field and a title character (char) field.
     """
     if new_slug is not None:
@@ -52,12 +60,12 @@ class UserProfileManager(models.Manager):
             user.set_password(password)
             user.save()
             new_obj=True
-            self.request.session['user'] = user.id  
-            return user, new_obj      
-    
+            self.request.session['user'] = user.id
+            return user, new_obj
+
 
     # def add_follower(self, request, instance, pk=None):
-    #     
+    #
     #     if request.user.is_authenticated:
     #         requested_user = self.model.objects.get(pk=pk)
     #         following = False
@@ -72,7 +80,7 @@ class UserProfileManager(models.Manager):
 
 
 
-        
+
 
 
 class UserProfileModel(models.Model):
@@ -93,13 +101,14 @@ class UserProfileModel(models.Model):
     slug            = models.SlugField(null=True, blank=True)
     follower        = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE, null=True)
     following       = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE, null=True)
+    tag             = models.CharField(choices = ALL_CHOICES,max_length=3)
     # location = models.PointField()
 
     objects = UserProfileManager()
 
     class Meta:
         unique_together = ('follower', 'following')
-    
+
 
     def __str__(self):
         ''' Representation of instances '''
@@ -108,7 +117,7 @@ class UserProfileModel(models.Model):
     def get_absolute_url(self):
         """ Url methodes """
         return reverse('portfolio:profile-detail-cbv', kwargs={'slug':self.slug})
-    
+
     def get_featured_profile(self):
         return UserProfileModel.objects.first()
 
@@ -120,6 +129,3 @@ def product_pre_save_receiver(sender, instance, *args, **kwargs):
         instance.slug = unique_slug_generator(instance)
 
 pre_save.connect(product_pre_save_receiver, sender=UserProfileModel)
-    
-
-

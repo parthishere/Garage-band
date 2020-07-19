@@ -7,7 +7,7 @@
 
     {% for answer in answer_list %}
       <div class="row text-info">
-         {{ answer.question.question }}
+         {{ answer.question }}
       </div>
           <hr></hr>
         <div class="row text-dark">
@@ -27,5 +27,6 @@
   </ul>
   {% else %}
     <p>There are no answers in the library.</p>
+    {% include 'answers/post-answer.html' %}
   {% endif %}
 {% endblock %}

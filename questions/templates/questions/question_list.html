@@ -6,17 +6,15 @@
   {% if question_list %}
   <ul class="list-group">
     {% for question in question_list %}
-      <li style="padding: 4px; margin: 3px; list-style: none; text-decoration: none;" class="list-group-item list-group-item-action list-group-item-dark">
-        <a style="text-decoration: none; color: black" href="{{ question.get_absolute_url }}">{{ question.question }}</a>
-        &nbsp; &nbsp; &nbsp;
-        by
-        <a style="text-decoration: none; color: black;" href="{{ question.user.get_absolute_url }}"> {{question.user}} </a>
-      </li>
       <li>
-          {% if question.image %}
-             <img src="{{ question.image.url }}" class="img-fluid"/>
-          {% endif %}
+        <a href="{{ question.get_absolute_url }}">{{ question.question }}</a>
+            {% if question.image %}
+               <img src="{{ question.image.url }}" class="img-fluid"/>
+            {% endif %}
+        by
+        <a  href="{{ question.user.get_absolute_url }}"> {{question.user}} </a>
       </li>
+
     {% endfor %}
   </ul>
   {% else %}

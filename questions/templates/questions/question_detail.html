@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col">
           <form action = "{{answer_url}}" method = "GET" >
-            <input type = "hidden" name = "q_id" value = {{q_id}} />
+            <input type = "hidden" name = "question" value = {{question}} />
             <input type ="submit"  class="btn btn-success" role="button" value="Answer this question">
           </form>
         </div>
@@ -71,7 +71,7 @@
           </div>
  </div>
 
- <div style="margin-left: 20px;">
+ <div>
         <br>
         <ul class="list-group">
           {% for key, comment in comment_dictionary.items %}
@@ -79,7 +79,7 @@
               {% if comment %}
                 {% for comm in comment %}
 
-                    <li class="list-group-item disabled">{{ comm }}</li>
+                    <li>{{ comm }}</li>
 
                 {% endfor %}
               {% endif %}

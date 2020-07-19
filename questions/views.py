@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from django.views.generic import CreateView, View ,ListView
+from django.views.generic import CreateView, View ,ListView,UpdateView,DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import QuestionForm
@@ -55,6 +55,34 @@ def QuestionDetailView(View):
         context['comment_dictionary'] = comment_dictionary
         return context
 
-class QuestionListView(generic.ListView):
+class QuestionListView(generic.ListView,request.user):
         model = Questions
         paginate_by = 10
+
+        def get_context_data(self,*args,**kwargs):
+            super().get_context_data(*args,**kwargs)
+            user = UserProfileModel.objects.get(user=request.user)
+            tag =  question.objects.fliter(tag=user.tag)
+
+class UpdateQuestion(LoginRequiredMixin, UpdateView):
+    model = Question
+    fields = ['question']
+    success_url = reverse_lazy('questions')
+    template_name = 'questions/question_update_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        question_id = self.kwargs['pk']
+        question = Question.objects.get(id=question_id)
+        context['question'] = question.question
+        return context
+
+class QuestionDelete(DeleteView):
+    template_name = 'questions/question_confirm_delete.html'
+
+    def get_object(self):
+        id = self.kwargs.get(id=id)
+        return get_object_or_404(Question,id=id)
+
+    def  get_success_url(self):
+        return reverse(question:questions)

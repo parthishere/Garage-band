@@ -5,8 +5,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-
-from myquora.models import Answer, Author, Comment, Question
+from .models import Answer,Comment
 
 
 class CommentCreate(LoginRequiredMixin, CreateView):
@@ -78,3 +77,29 @@ class AnswerCreate(LoginRequiredMixin, CreateView):
 class AnswerListView(generic.ListView):
     model = Answer
     paginate_by = 3
+
+class UpdateAnswer(LoginRequiredMixin, UpdateView):
+    model = Answer
+    fields = ['answer']
+    template_name = 'answers/answer_update_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        answer_id = self.kwargs['pk']
+        answer = Answer.objects.get(id=answer_id)
+        self.pk = answer.question.id
+        context['answer'] = answer.answer
+        return context
+
+    def get_success_url(self):
+        return (reverse('question-detail', kwargs={'pk': self.object.question.id}))
+
+class AnswerDelete(DeleteView):
+    template_name = 'answers/answer_confirm_delete.html'
+
+    def get_object(self):
+        id = self.kwargs.get(id=id)
+        return get_object_or_404(Answer,id=id)
+
+    def  get_success_url(self):
+        return reverse(answer:answers)
