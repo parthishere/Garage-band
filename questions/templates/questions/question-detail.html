@@ -15,12 +15,12 @@
   <ul>
 
     {% for answer in answers %}
-      <div class="row text-info">
          {{ answer.user }}
          
       </div>
           <hr></hr>
         <div class="row text-dark">
+      <a href="{% url 'answers:detail' answer.pk %}">
           {{ answer.answer }}
            Total Likes : {{ answer.like }}</br>
   Total Dislikes : {{ answer.dislike }}</br>
@@ -33,8 +33,11 @@
     {% endfor %}
   </ul>
 
-    <p>There are no answers in the library.</p>
-
-
+    <p>There are no answers in the library.</p></br>
+{% if request.user == object.user %}
+<a class='label-danger' href="{% url 'questions:delete' object.pk %}"> Delete !</a></br>
+<a class='label-info' href="{% url 'questions:update' object.pk %}"> update question</a></br>
+{% else %}
+{% endif %}
 {% endblock %}
 © 2020 GitHub, Inc.

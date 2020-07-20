@@ -109,32 +109,6 @@ def downvote_create(self, pk, q_pk):
     return redirect(reverse('questions:detail', kwargs={'pk':q_pk}))   
   
 
-# class UpvoteCreate(LoginRequiredMixin, CreateView):
-#     model = Answers
-#     fields = ['answer', 'like']
-
-#     def post(self, request, *args, **kwargs):
-#         answer_id = self.kwargs['pk']
-#         answer = Answers.objects.get(id=answer_id)
-#         answer.like += 1
-#         answer.save()
-#         response = redirect(
-#             reverse('question:detail', kwargs={'pk': answer.question.id}))
-#         return response
-
-
-# class DownvoteCreate(LoginRequiredMixin, CreateView):
-#     model = Answers
-#     fields = ['answer', 'dislike']
-
-#     def post(self, request, *args, **kwargs):
-#         answer_id = self.kwargs['pk']
-#         answer = Answers.objects.get(id=answer_id)
-#         answer.dislike += 1
-#         answer.save()
-#         response = redirect(
-#             reverse('question:detail', kwargs={'pk': answer.question.id}))
-#         return response
 
 class QuestionDeleteView(DeleteView):
     model = Questions
