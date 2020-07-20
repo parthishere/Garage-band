@@ -3,7 +3,7 @@
      <div class="content">
      {{ objects_list }}
        {% for question in objects_list %}
-       <a href="{% url 'questions:question-detail' question.pk %}">{{ question.question }}</a>
+       <a href="{% url 'questions:detail' question.pk %}">{{ question.question }}</a>
        <p>
          {% if question.image %}
             <img src="{{ question.image.url }}" class="img-fluid"/>

@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, HttpResponse
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, View, ListView, DetailView, FormView
+from django.views.generic import CreateView, View, ListView, DetailView, FormView, DeleteView, UpdateView
+from django.views.generic.detail import BaseDetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -29,9 +30,9 @@ class QuestionCreate(LoginRequiredMixin, FormView):
         # form.instance.user = request.user
         if form.is_valid():
             form.save()
-            return reverse('questions:question-list')
+            return reverse('questions:list')
         else:
-            return reverse('questions:question-detail')
+            return reverse('questions:detail')
 
     # def get_success_url(self):
     #     return reverse_lazy('questions:question-list')
@@ -52,58 +53,96 @@ class QuestionDetailView(DetailView, FormView):
     model = Questions
     form_class = PostAnswerForm
 
+    def get_context_data(self, *args, **kwargs):
+        pk = kwargs.get('pk') 
+        context = super(QuestionDetailView, self).get_context_data(*args, **kwargs)
+        context['form'] = self.get_form()
+        question = Questions.objects.get(pk=pk)
+        context['answers'] = Answers.objects.filter(question=question)
+        context['object'] = Question.objects.get(pk=pk)
+        print(context['answers'])
+        
+        return context
+
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, self.template_name, {'form': form})
+        pk = request.GET.get('pk')
+        pk = kwargs.get('pk')
+        if pk:
+            question = Questions.objects.get(pk=pk)
+            answers = Answers.objects.filter(question=question)
+            obj = Questions.objects.get(pk=pk)
+            context = {
+                'form':form,
+                'answers': answers,
+                'object':obj
+            }
+            return render(request, self.template_name, context)
+        else:
+            return HttpResponse("Something gone wrong")
 
     def post(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         if pk is None: 
             pk = request.GET.get('pk')  
         form = self.form_class(request.POST)
-        form.instance.question_id = request.GET.get('pk')
-        # instance_user = UserProfileModel.objects.get(user=request.user)
+        question = Questions.objects.get(pk=pk)
+        form.instance.question = question
         form.instance.user = request.user
+        print(object)
         if form.is_valid():
             form.save()
-            return reverse('questions:question-detail', kwargs={'pk': pk})
+            return redirect(reverse('questions:detail', kwargs={'pk': pk}))
         else:
-            return reverse('questions:question-detail', kwargs={'pk': pk})
+            return redirect(reverse('questions:detail', kwargs={'pk': pk}))
 
-    def get_context_data(self, **kwargs):
-        pk = self.kwargs.get('pk')
-        
-        context = super(QuestionDetailView, self).get_context_data(**kwargs)
-        context['form'] = self.get_form()
-        context['answers'] = Answers.objects.filter(question_id=pk)
-        return context
-        # else:
-        #     raise AttributeError("pk not found in url")
+def upvote_create(self, pk, q_pk):
+        answer_instance = Answers.objects.get(pk=pk)
+        answer_instance.like += 1
+        answer_instance.save()
+        return redirect(reverse('questions:detail', kwargs={'pk':q_pk}))
+
+def downvote_create(self, pk, q_pk):
+    answer_instance = Answers.objects.get(pk=pk)
+    answer_instance.dislike += 1
+    answer_instance.save()
+    return redirect(reverse('questions:detail', kwargs={'pk':q_pk}))   
+  
+
+# class UpvoteCreate(LoginRequiredMixin, CreateView):
+#     model = Answers
+#     fields = ['answer', 'like']
+
+#     def post(self, request, *args, **kwargs):
+#         answer_id = self.kwargs['pk']
+#         answer = Answers.objects.get(id=answer_id)
+#         answer.like += 1
+#         answer.save()
+#         response = redirect(
+#             reverse('question:detail', kwargs={'pk': answer.question.id}))
+#         return response
+
+
+# class DownvoteCreate(LoginRequiredMixin, CreateView):
+#     model = Answers
+#     fields = ['answer', 'dislike']
+
+#     def post(self, request, *args, **kwargs):
+#         answer_id = self.kwargs['pk']
+#         answer = Answers.objects.get(id=answer_id)
+#         answer.dislike += 1
+#         answer.save()
+#         response = redirect(
+#             reverse('question:detail', kwargs={'pk': answer.question.id}))
+#         return response
+
+class QuestionDeleteView(DeleteView):
+    model = Questions
+    success_url = reverse_lazy('questions:list')
+    template_name_suffix = '_confirm_delete'
+
+class QuestionUpdateView(UpdateView):
+    model = Questions
+    fields = ['question', 'image']
+    template_name_suffix = '_update_form'
     
-
-class UpvoteCreate(LoginRequiredMixin, CreateView):
-    model = Answers
-    fields = ['answer', 'answer_id', 'upvote']
-
-    def post(self, request, *args, **kwargs):
-        answer_id = self.kwargs['slug']
-        answer = Answers.objects.get(id=answer_id)
-        answer.upvote += 1
-        answer.save()
-        response = redirect(
-            reverse('question-detail', kwargs={'pk': answer.question.id}))
-        return response
-
-
-class DownvoteCreate(LoginRequiredMixin, CreateView):
-    model = Answers
-    fields = ['answer', 'answer_id', 'downvote']
-
-    def post(self, request, *args, **kwargs):
-        answer_id = self.kwargs['slug']
-        answer = Answers.objects.get(id=answer_id)
-        answer.downvote += 1
-        answer.save()
-        response = redirect(
-            reverse('question-detail', kwargs={'slug': answer.question_id.id}))
-        return response

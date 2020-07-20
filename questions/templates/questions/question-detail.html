@@ -2,7 +2,9 @@
 {% block body_block %}
 
   {{ object.question }}
-
+  {{ object.user }}</br>
+ 
+ 
   <form method='POST'>
   {% csrf_token %}
   {{ form }}
@@ -10,32 +12,29 @@
   </form>
  <h1>answer List</h1>
 
-  {% if answers %}
   <ul>
 
     {% for answer in answers %}
       <div class="row text-info">
-         {{ answer.question.question }}
+         {{ answer.user }}
+         
       </div>
           <hr></hr>
         <div class="row text-dark">
           {{ answer.answer }}
+           Total Likes : {{ answer.like }}</br>
+  Total Dislikes : {{ answer.dislike }}</br>
+  <a href="{% url 'questions:like' answer.pk object.pk %}"> like </a></br>
+
         </div>
         <br>
         <br>
-        <div class="row text-success">
-            <div class="col"></div>
-            <div class="col-6"></div>
-            <div class="col">
-                by <a href="{{ answer.user.get_absolute_url }}">{{ answer.user }} </a>
-            </div>
-        </div>
 
     {% endfor %}
   </ul>
-  {% else %}
+
     <p>There are no answers in the library.</p>
-  {% endif %}
+
 
 {% endblock %}
 © 2020 GitHub, Inc.

@@ -11,18 +11,10 @@ class Questions(models.Model):
     user        = models.ForeignKey(User, on_delete=models.CASCADE, blank=True ,null=True)
     image       = models.ImageField(null=True,blank=True)
     slug        = models.SlugField(unique=True,blank=True,null=True)
-    like        = models.IntegerField()
+    like        = models.IntegerField(default=0)
+    dislike     = models.IntegerField(default=0)
     time        = models.DateTimeField(auto_now_add=True)
-
-    def is_liked(self,*args,**kwargs):
-        """ Question's Like """
-        if self.request.user.is_authenticated:
-            self.like += 1
-            self.save(using=self._db)
-        else:
-            return redirect('portfolio:home')
         
-
     def __str__(self):
         """ str method """
         pk=self.pk
