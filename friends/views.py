@@ -42,13 +42,13 @@ def view_friends(request, username, template_name="friendship/friend/user_list.h
 
 @login_required
 def friendship_add_friend(
-    request, to_username, template_name="friendship/friend/add.html"
+    request, to_username, template_name="friends/follow/add.html"
 ):
     """ Create a FriendshipRequest """
     ctx = {"to_username": to_username}
 
     if request.method == "POST":
-        to_user = user_model.objects.get(username=to_username)
+        to_user = user_model.objects.get(user=to_username.pk)
         from_user = request.user
         try:
             Friend.objects.add_friend(from_user, to_user)

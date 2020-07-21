@@ -83,8 +83,6 @@ class UserProfileManager(models.Manager):
 class UserProfileModel(models.Model):
     """ User Profile Model """
     user            = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name="user")
-    followers       = models.ManyToManyField(User , related_name='followers_of_instance' , blank=True,)
-    
     dob             = models.DateField(null=True, blank=True, default=timezone.now())
     phone_no        = PhoneNumberField(null=True, blank=True)
     profession      = models.TextField(max_length=100, null=True, blank=True)
@@ -114,7 +112,7 @@ class UserProfileModel(models.Model):
 
     def get_absolute_url(self):
         """ Url methodes """
-        return reverse('portfolio:profile-detail-cbv', kwargs={'slug':self.slug})
+        return reverse('portfolio:detail', kwargs={'slug':self.slug})
     
     def get_featured_profile(self):
         return UserProfileModel.objects.first()

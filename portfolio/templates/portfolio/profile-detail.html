@@ -2,6 +2,18 @@
 
 {% block body_block %}
 
-{{ object }}
-</form>
+{{ object }} </br>
+{{ object.user }} </br>
+{{ object.user.email }} </br>
+{{ object.about }} </br>
+{{ object.softwear }} </br>
+</br>
+</hr>
+{{ qs }}</br>
+{% for query in qs %}
+{{ query.question }}</br>
+{% endfor %}
+
+
+<a href="{% url 'friends:friendship_add_friend' object.user %}">add friend</a>
 {% endblock %}

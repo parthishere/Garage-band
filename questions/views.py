@@ -30,9 +30,9 @@ class QuestionCreate(LoginRequiredMixin, FormView):
         # form.instance.user = request.user
         if form.is_valid():
             form.save()
-            return reverse('questions:list')
+            return redirect(reverse('questions:list'))
         else:
-            return reverse('questions:detail')
+            return redirect(reverse('questions:list'))
 
     # def get_success_url(self):
     #     return reverse_lazy('questions:question-list')

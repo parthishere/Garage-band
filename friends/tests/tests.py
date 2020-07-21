@@ -7,8 +7,8 @@ from django.db import IntegrityError
 from django.test import TestCase
 from django.urls import reverse
 
-from friendship.exceptions import AlreadyExistsError, AlreadyFriendsError
-from friendship.models import Block, Follow, Friend, FriendshipRequest
+from friends.exceptions import AlreadyExistsError, AlreadyFriendsError
+from friends.models import Block, Follow, Friend, FriendshipRequest
 
 TEST_TEMPLATES = os.path.join(os.path.dirname(__file__), "templates")
 

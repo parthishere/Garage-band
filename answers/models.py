@@ -44,12 +44,13 @@ class Answers(models.Model):
 
 
 class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     comment = models.TextField()
     answer = models.ForeignKey(Answers, on_delete=models.CASCADE, blank=True, null=True)
     time    = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.pk
+        return str(self.pk)
 
 
 def user_pre_save_receiver(sender,instance,*args,**kwargs):

@@ -13,21 +13,23 @@ from questions.models import Questions
 def HomeView(request):
     """ HOME VIEW FOR PORTFOIO PAGE """
     qs = Questions.objects.filter(user=request.user)
+    user = UserProfileModel.objects.get(user=request.user)
     context = {
         'qs': qs,
+        'user': user,
     }
-    return render(request, 'portfoilo/portfoilo.html', context)
+    return render(request, 'portfolio/portfolio.html', context)
 
 
 
-@login_required        
-def add_followers_view(request, pk):
-    """ Pk is requested following user's primary key and instance is you as a user(who sent follow request) instance, So don't get confused """
-    requested_user = UserProfileModel.objects.get(pk=pk)
-    user = UserProfileModel.objects.get(user=request.user)
-    requested_user.following.add(user)
-    requested_user.save()
-    return reverse('portfolio:profile-detail', kwargs={'pk': pk})
+# @login_required        
+# def add_followers_view(request, pk):
+#     """ Pk is requested following user's primary key and instance is you as a user(who sent follow request) instance, So don't get confused """
+#     requested_user = UserProfileModel.objects.get(pk=pk)
+#     user = UserProfileModel.objects.get(user=request.user)
+#     requested_user.following.add(user)
+#     requested_user.save()
+#     return reverse('portfolio:profile-detail', kwargs={'pk': pk})
     
 
 
@@ -55,5 +57,10 @@ class SearchProfileView(ListView):
 class ProfileDetailView(DetailView):
     model=UserProfileModel
     template_name= 'portfolio/profile-detail.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(ProfileDetailView, self).get_context_data(**kwargs)
+        qs = Questions.objects.filter(user=self.object.user)
+        return context
         
         

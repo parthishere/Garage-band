@@ -1,10 +1,3 @@
-{% url 'portfoilo:home' as home_url %}
-{% url 'admin:index' as admin_url %}
-{% url 'questions:ask-question' as ask_question_url %}
-{% url 'accounts_login' as login_url %}
-{% url 'accounts_logout' as logout_url %}
-{% url 'accounts_signup' as signup_url %}
-{% url 'portfolio:edit_profile' as edit_profile_url %}
 
 
 
@@ -19,10 +12,10 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="{{ home_url }}">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="{% url 'portfoilo:home' %}">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ ask_question_url }}">Link</a>
+        <a class="nav-link" href="{% url 'questions:ask-question' %}">Link</a>
       </li>
       <li class="nav-item dropdown">
       {% if request.user.is_authenticated %}
@@ -30,24 +23,24 @@
           Your Profile
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="{{ edit_profile_url }}">Edit Profile</a>
-          <a class="dropdown-item" href="{{ logout_url }}">Log Out</a>
+          {% comment %} <a class="dropdown-item" href="{% url 'portfolio:edit_profile' %}">Edit Profile</a> {% endcomment %}
+          <a class="dropdown-item" href="{% url 'account_logout' %}">Log Out</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Dashboard</a>
         </div>
         {% else %}
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ signup_url }}">Sign Up</a>
+        <a class="nav-link" href="{% url 'account_signup' %}">Sign Up</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ login_url }}">Login</a>
+        <a class="nav-link" href="{% url 'account_login' %}">Login</a>
       </li>
       {% endif %}
       {% if request.user.is_authenticated %}
       {% if request.user.is_superuser %}
       <li class="nav-item">
-        <a class="nav-link" href="{{ admin_url }}">Admin</a>
+        <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
       </li>
       {% endif %}
       {% endif %}

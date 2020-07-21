@@ -8,8 +8,8 @@ from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from friendship.exceptions import AlreadyExistsError, AlreadyFriendsError
-from friendship.signals import (
+from friends.exceptions import AlreadyExistsError, AlreadyFriendsError
+from friends.signals import (
     block_created,
     block_removed,
     followee_created,
@@ -497,10 +497,10 @@ class Follow(models.Model):
     """ Model to represent Following relationships """
 
     follower = models.ForeignKey(
-        AUTH_USER_MODEL, models.CASCADE, related_name="following"
+        AUTH_USER_MODEL, models.CASCADE, related_name="users_following"
     )
     followee = models.ForeignKey(
-        AUTH_USER_MODEL, models.CASCADE, related_name="followers"
+        AUTH_USER_MODEL, models.CASCADE, related_name="users_followers"
     )
     created = models.DateTimeField(default=timezone.now)
 
