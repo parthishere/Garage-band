@@ -1,3 +1,4 @@
+
 {% extends 'base/base.html' %}
 
 {% block body_block %}
@@ -7,13 +8,16 @@
 {{ object.user.email }} </br>
 {{ object.about }} </br>
 {{ object.softwear }} </br>
+
+</hr>
+
 </br>
 </hr>
 {{ qs }}</br>
 {% for query in qs %}
 {{ query.question }}</br>
-{% endfor %}
+{% endfor %}</br>
+followers: {{ followers }}</br>
+following: {{ following }}</br>
 
-
-<a href="{% url 'friends:friendship_add_friend' object.user %}">add friend</a>
 {% endblock %}

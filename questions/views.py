@@ -10,7 +10,7 @@ from .models import Questions
 from answers.models import Answers
 from portfolio.models import UserProfileModel
 from answers.forms import PostAnswerForm 
-
+from friendship.models import Follow, Block, Friend
 
 # Create your views here.
 
@@ -43,8 +43,13 @@ class QuestionListView(ListView):
     template_name = 'questions/question-list.html'
     
     def get_context_data(self, **kwargs):
+        request = self.request
         context = super(QuestionListView, self).get_context_data(**kwargs)
+        list_of_following = Follow.objects.following(request.user)
+        all_users = request.user
+        questions = Questions.objects.filter(user=all_users)
         context['objects_list'] = Questions.objects.all()
+        context['questions'] = questions
         return context
 
 
@@ -119,4 +124,9 @@ class QuestionUpdateView(UpdateView):
     model = Questions
     fields = ['question', 'image']
     template_name_suffix = '_update_form'
+    
+def feed(request):
+    list_of_following = Follow.objects.following(request.user)
+    questions = Questions.objects.filter(user=list_of_following)
+    return None
     

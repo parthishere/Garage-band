@@ -2,9 +2,9 @@ from django.shortcuts import render, reverse, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
-# from actstream.actions import follow, unfollow
 
 
+from friendship.models import Friend, Follow, Block
 from .models import UserProfileModel
 from questions.models import Questions
 
@@ -14,22 +14,16 @@ def HomeView(request):
     """ HOME VIEW FOR PORTFOIO PAGE """
     qs = Questions.objects.filter(user=request.user)
     user = UserProfileModel.objects.get(user=request.user)
+    followers = Follow.objects.followers(request.user)
+    following = Follow.objects.following(request.user)
     context = {
         'qs': qs,
         'user': user,
+        'followers': followers,
+        'following': following,
     }
     return render(request, 'portfolio/portfolio.html', context)
 
-
-
-# @login_required        
-# def add_followers_view(request, pk):
-#     """ Pk is requested following user's primary key and instance is you as a user(who sent follow request) instance, So don't get confused """
-#     requested_user = UserProfileModel.objects.get(pk=pk)
-#     user = UserProfileModel.objects.get(user=request.user)
-#     requested_user.following.add(user)
-#     requested_user.save()
-#     return reverse('portfolio:profile-detail', kwargs={'pk': pk})
     
 
 
@@ -60,7 +54,52 @@ class ProfileDetailView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super(ProfileDetailView, self).get_context_data(**kwargs)
-        qs = Questions.objects.filter(user=self.object.user)
+        context['qs'] = Questions.objects.filter(user=self.object.user)
+        context['followers'] = Follow.objects.followers(self.object.user)
+        context['following'] = Follow.objects.following(self.object.user)
         return context
         
         
+def list_of_friends(request, user):
+    list_of_friends = Friend.objects.friends(user)
+    list_of_followers = Follow.objects.followers(request.user)
+    list_of_following = Follow.objects.following(request.user)
+    context = {
+        'list': list_of_friends, 
+    }
+    return reder(request, 'portfoilo/list-friend.html', context)
+
+
+def add_follower_user(request, other_user_pk):
+    #### Make request.user a follower of other_user:
+    other_user = UserProfileModel.objects.get(pk=other_user_pk)
+    Follow.objects.add_follower(request.user, other_user.user)      
+    
+    return redirect(reverse('portfolio:detail', kwargs={'pk':other_user_pk}))
+
+
+def remove_follower_user(request, other_user_pk):
+    other_user = UserProfileModel.objects.get(pk=other_user_pk)
+    Follow.objects.remove_follower(request.user, other_user.user)
+    
+    return redirect(reverse('portfolio:detail', kwargs={'pk':other_user_pk}))
+
+
+def block_user(request, other_user_pk):
+    #### Make request.user block other_user:
+    other_user = UserProfileModel.objects.get(pk=other_user_pk)
+    Block.objects.add_block(request.user, other_user.user)
+    # context = {
+    #     'list': list_of_friends, 
+    # }
+    return redirect(reverse('portfolio:detail', kwargs={'pk':other_user_pk}))
+
+
+def unblock_user(request, other_user_pk):
+    #### Make request.user unblock other_user:
+    other_user = UserProfileModel.objects.get(pk=other_user_pk)
+    Block.objects.remove_block(request.user, other_user.user)
+    # context = {
+    #     'list': list_of_friends, 
+    # }
+    return redirect(reverse('portfolio:detail', kwargs={'pk':other_user_pk}))

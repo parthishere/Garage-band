@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'portfolio',
     'answers',
     'questions',
-    'friends',
+    'friendship',
 
     'django.contrib.sites',
     'allauth',

@@ -59,22 +59,6 @@ class UserProfileManager(models.Manager):
             new_obj=True
             self.request.session['user'] = user.id  
             return user, new_obj      
-    
-
-    # def add_follower(self, request, instance, pk=None):
-    #     
-    #     if request.user.is_authenticated:
-    #         requested_user = self.model.objects.get(pk=pk)
-    #         following = False
-    #         if instance in requested_user.followers:
-    #             following = True
-    #         else:
-    #             requested_user.followers.add(instance)
-    #             instance.following.add(requested_user)
-    #             instance.save()
-    #     else:
-    #         return redirect('accounts_login')
-
 
 
         
@@ -102,13 +86,11 @@ class UserProfileModel(models.Model):
 
     objects = UserProfileManager()
 
-    class Meta:
-        unique_together = ('follower', 'following')
     
 
     def __str__(self):
         ''' Representation of instances '''
-        return self.user.email
+        return str(f"email:{self.user.email}  id: {self.pk}")
 
     def get_absolute_url(self):
         """ Url methodes """

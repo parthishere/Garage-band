@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-
+{% load friendshiptags %}
 {% block body_block %}
 
 
@@ -14,5 +14,8 @@
 {% for query in qs %}
 {{ query.question }}</br>
 {% endfor %}
+followers: {{ followers }}</br>
+following: {{ following }}</br>
+
 
 {% endblock %}

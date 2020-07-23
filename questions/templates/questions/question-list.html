@@ -10,5 +10,10 @@
          {% endif %}
        </p>
        {% endfor %}
+
+
+       {% for q in questions %}
+       {{ q.question }}
+       {% endfor %}
      </div>
 {% endblock %}

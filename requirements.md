@@ -1,0 +1,14 @@
+pip install Django
+pip install django-allauth
+pip install django-rest-auth
+pip install pillow
+pip install pytest==4.5.0
+pip install pytest-django==3.4.8
+pip install pytest-cov==2.7.1
+pip install pytest-pythonpath==0.7.3
+pip install factory-boy==2.11.1
+pip install flake8==3.5.0
+pip install pyflakes==1.6.0
+pip install bumpversion
+pip install twine
+pip install check-manifest
