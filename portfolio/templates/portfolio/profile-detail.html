@@ -1,7 +1,23 @@
+
 {% extends 'base/base.html' %}
 
 {% block body_block %}
 
+{{ object }} </br>
+{{ object.user }} </br>
+{{ object.user.email }} </br>
+{{ object.about }} </br>
+{{ object.softwear }} </br>
 
-{{ object }}
+</hr>
+
+</br>
+</hr>
+{{ qs }}</br>
+{% for query in qs %}
+{{ query.question }}</br>
+{% endfor %}</br>
+followers: {{ followers }}</br>
+following: {{ following }}</br>
+
 {% endblock %}

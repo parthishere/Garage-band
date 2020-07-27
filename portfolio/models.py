@@ -17,6 +17,10 @@ from .utils import random_string_generator
 
 TAG_CHOICES = [
     ('EN', 'Entertainment'), 
+    ('EN2', 'Entertaintment 2'),
+    ('EN3', 'Entertaintment 3'),
+    ('EN4', 'Entertaintment 4'),
+    ('EN5', 'Entertaintment 5'),
 ]
 
 
@@ -59,14 +63,14 @@ class UserProfileManager(models.Manager):
             new_obj=True
             self.request.session['user'] = user.id  
             return user, new_obj      
-    
+
+
         
 
 
 class UserProfileModel(models.Model):
     """ User Profile Model """
     user            = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name="user")
-    followers       = models.ManyToManyField(User , related_name='followers_of_instance' , blank=True,)
     dob             = models.DateField(null=True, blank=True, default=timezone.now())
     phone_no        = PhoneNumberField(null=True, blank=True)
     profession      = models.TextField(max_length=100, null=True, blank=True)
@@ -78,24 +82,20 @@ class UserProfileModel(models.Model):
     video           = models.FileField(upload_to='work_video/'  ,validators=[validate_video_file_extension],null=True, blank=True)
     awards          = models.TextField(null=True, blank=True)
     slug            = models.SlugField(null=True, blank=True)
-    follower        = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE, null=True)
-    following       = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE, null=True)
     tags            = models.CharField(choices=TAG_CHOICES, default='EN', max_length=3)
     
 
     objects = UserProfileManager()
 
-    class Meta:
-        unique_together = ('follower', 'following')
     
 
     def __str__(self):
         ''' Representation of instances '''
-        return self.user.email
+        return str(f"email:{self.user.email}  id: {self.pk}")
 
     def get_absolute_url(self):
         """ Url methodes """
-        return reverse('portfolio:profile-detail-cbv', kwargs={'slug':self.slug})
+        return reverse('portfolio:detail', kwargs={'slug':self.slug})
     
     def get_featured_profile(self):
         return UserProfileModel.objects.first()

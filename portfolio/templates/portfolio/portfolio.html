@@ -1,14 +1,21 @@
 {% extends 'base/base.html' %}
-
+{% load friendshiptags %}
 {% block body_block %}
-{{ user }}</br>
 
-{% for obj in user %}
-{{ obj.email }}</br>
-{{ obj.user }}</br>
-{{ obj.user.email }}</br>
-{{ obj.about }}
+
+{{ user }} </br>
+{{ user.user }} </br>
+{{ user.user.email }} </br>
+{{ user.about }} </br>
+{{ user.softwear }} </br>
+</br>
+</hr>
+{{ qs }}</br>
+{% for query in qs %}
+{{ query.question }}</br>
 {% endfor %}
+followers: {{ followers }}</br>
+following: {{ following }}</br>
 
 
 {% endblock %}
