@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import QuestionForm
 from .models import Questions
 from answers.models import Answers
-from portfolio.models import UserProfileModel
+from portfolio.models import UserProfileModel, User
 from answers.forms import PostAnswerForm 
 from friendship.models import Follow, Block, Friend
 
@@ -45,11 +45,12 @@ class QuestionListView(ListView):
     def get_context_data(self, **kwargs):
         request = self.request
         context = super(QuestionListView, self).get_context_data(**kwargs)
-        list_of_following = Follow.objects.following(request.user)
-        all_users = request.user
-        questions = Questions.objects.filter(user=all_users)
+        # list_of_following = Follow.objects.following(request.user)
+        # list_of_user = UserProfileModel.objects.filter(user=[u for u in list_of_following])
+        # list_of_user = User.objects.filter(user=[u for u in list_of_following])
+        # questions = Questions.objects.filter(user=[u for u in list_of_following])
         context['objects_list'] = Questions.objects.all()
-        context['questions'] = questions
+        # context['questions'] = questions
         return context
 
 
@@ -58,6 +59,7 @@ class QuestionDetailView(DetailView, FormView):
     model = Questions
     form_class = PostAnswerForm
 
+    
     def get_context_data(self, *args, **kwargs):
         pk = kwargs.get('pk') 
         context = super(QuestionDetailView, self).get_context_data(*args, **kwargs)
@@ -101,15 +103,20 @@ class QuestionDetailView(DetailView, FormView):
         else:
             return redirect(reverse('questions:detail', kwargs={'pk': pk}))
 
-def upvote_create(self, pk, q_pk):
-        answer_instance = Answers.objects.get(pk=pk)
-        answer_instance.like += 1
-        answer_instance.save()
-        return redirect(reverse('questions:detail', kwargs={'pk':q_pk}))
 
-def downvote_create(self, pk, q_pk):
+def upvote_create(request, pk, q_pk):
     answer_instance = Answers.objects.get(pk=pk)
-    answer_instance.dislike += 1
+    user = request.user
+    answer_instance.like.add(user) 
+    answer_instance.like_count += 1
+    answer_instance.save()
+    return redirect(reverse('questions:detail', kwargs={'pk':q_pk}))
+
+def downvote_create(request, pk, q_pk):
+    answer_instance = Answers.objects.get(pk=pk)
+    user = request.user
+    answer_instance.dislike.add(user)
+    answer_instance.dislike_count += 1
     answer_instance.save()
     return redirect(reverse('questions:detail', kwargs={'pk':q_pk}))   
   
@@ -125,8 +132,8 @@ class QuestionUpdateView(UpdateView):
     fields = ['question', 'image']
     template_name_suffix = '_update_form'
     
-def feed(request):
-    list_of_following = Follow.objects.following(request.user)
-    questions = Questions.objects.filter(user=list_of_following)
-    return None
+# def feed(request):
+#     list_of_following = Follow.objects.following(request.user)
+#     questions = Questions.objects.filter(user=[u for u in list_of_following])
+#     return None
     

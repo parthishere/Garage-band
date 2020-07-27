@@ -7,13 +7,15 @@ from portfolio.models import UserProfileModel,User
 # Create your models here.
 class Questions(models.Model):
     """ Question Model """
-    question    = models.TextField()
-    user        = models.ForeignKey(User, on_delete=models.CASCADE, blank=True ,null=True)
-    image       = models.ImageField(null=True,blank=True)
-    slug        = models.SlugField(unique=True,blank=True,null=True)
-    like        = models.IntegerField(default=0)
-    dislike     = models.IntegerField(default=0)
-    time        = models.DateTimeField(auto_now_add=True)
+    question        = models.TextField()
+    user            = models.ForeignKey(User, on_delete=models.CASCADE, blank=True ,null=True)
+    image           = models.ImageField(null=True,blank=True)
+    slug            = models.SlugField(unique=True,blank=True,null=True)
+    like            = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE, related_name='liked_user')
+    like_count      = models.IntegerField(default=0)
+    dislike         = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE, related_name='disliked_user')
+    dislike_count   = models.IntegerField(default=0)
+    time            = models.DateTimeField(null=True, blank=True)
         
     def __str__(self):
         """ str method """

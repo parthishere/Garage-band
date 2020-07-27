@@ -12,7 +12,7 @@ from questions.models import Questions
 # Create your views here.
 def HomeView(request):
     """ HOME VIEW FOR PORTFOIO PAGE """
-    qs = Questions.objects.filter(user=request.user)
+    # qs = Questions.objects.filter(user=request.user)
     user = UserProfileModel.objects.get(user=request.user)
     followers = Follow.objects.followers(request.user)
     following = Follow.objects.following(request.user)

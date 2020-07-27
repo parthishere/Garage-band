@@ -22,8 +22,8 @@
         <div class="row text-dark">
       <a href="{% url 'answers:detail' answer.pk %}">
           {{ answer.answer }}
-           Total Likes : {{ answer.like }}</br>
-  Total Dislikes : {{ answer.dislike }}</br>
+           Total Likes : {{ answer.like_count }}</br>
+  Total Dislikes : {{ answer.dislike_count }}</br>
   <a href="{% url 'questions:like' answer.pk object.pk %}"> like </a></br>
 
         </div>
