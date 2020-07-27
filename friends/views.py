@@ -2,8 +2,8 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from friendship.exceptions import AlreadyExistsError
-from friendship.models import Block, Follow, Friend, FriendshipRequest
+from friends.exceptions import AlreadyExistsError
+from friends.models import Block, Follow, Friend, FriendshipRequest
 
 try:
     from django.contrib.auth import get_user_model

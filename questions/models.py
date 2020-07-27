@@ -22,11 +22,11 @@ class Questions(models.Model):
         else:
             return redirect('portfolio:home')
         
-
     def __str__(self):
         """ str method """
         pk=self.pk
         return str(pk)
+
 
 def questions_pre_save_receiver(sender,instance,*args,**kwargs):
     """ Signal """

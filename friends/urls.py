@@ -2,7 +2,7 @@ try:
     from django.conf.urls import url
 except ImportError:
     from django.conf.urls.defaults import url
-from friendship.views import (
+from friends.views import (
     all_users,
     block_add,
     block_remove,

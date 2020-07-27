@@ -8,8 +8,8 @@ from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-from friendship.exceptions import AlreadyExistsError, AlreadyFriendsError
-from friendship.signals import (
+from friends.exceptions import AlreadyExistsError, AlreadyFriendsError
+from friends.signals import (
     block_created,
     block_removed,
     followee_created,

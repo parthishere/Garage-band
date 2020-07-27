@@ -47,15 +47,12 @@ INSTALLED_APPS = [
     'portfolio',
     'answers',
     'questions',
+    'friends',
 
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    
-    
-
-    
 ]
 SITE_ID = 1
 

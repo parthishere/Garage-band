@@ -2,7 +2,6 @@ from django.shortcuts import render, reverse, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
-# from actstream.actions import follow, unfollow
 
 
 from .models import UserProfileModel
@@ -16,35 +15,7 @@ def HomeView(request):
     context = {
         'qs': qs,
     }
-    # if request.user.is_authenticated:
-    #     user_instance = UserProfileModel.objects.filter(user=request.user)
-    #     # session_id = request.session.get('user_id'==request.user.id)
-    #     if user_instance.exists():
-    #         context = {
-    #             'user': user_instance,
-    #         }
-    #         return render(request, 'portfolio/portfolio.html', context=context)
-    #     else:
-    #         user_instance = UserProfileModel.objects.create(user=request.user)
-    #         request.session['user_id'] = request.user.id
-    #         context = {
-    #             'user': user_instance,
-    #         }
-    #         return render(request, '/portfolio/portfolio.html', context=context)
-    # else:
-    #     return redirect('account_login')
     return render(request, 'portfoilo/portfoilo.html', context)
-
-
-
-@login_required        
-def add_followers_view(request, pk):
-    """ Pk is requested following user's primary key and instance is you as a user(who sent follow request) instance, So don't get confused """
-    requested_user = UserProfileModel.objects.get(pk=pk)
-    user = UserProfileModel.objects.get(user=request.user)
-    requested_user.following.add(user)
-    requested_user.save()
-    return reverse('portfolio:profile-detail', kwargs={'pk': pk})
     
 
 
@@ -65,7 +36,7 @@ class SearchProfileView(ListView):
             context['query'] = query
             return context
         else:
-            return UserProfileModel.get_featured_profile()
+            return HttpResponse("Oppps Somthing Gone Wrong!!")
 
 
 

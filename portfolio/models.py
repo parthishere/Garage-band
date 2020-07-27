@@ -60,23 +60,6 @@ class UserProfileManager(models.Manager):
             self.request.session['user'] = user.id  
             return user, new_obj      
     
-
-    # def add_follower(self, request, instance, pk=None):
-    #     
-    #     if request.user.is_authenticated:
-    #         requested_user = self.model.objects.get(pk=pk)
-    #         following = False
-    #         if instance in requested_user.followers:
-    #             following = True
-    #         else:
-    #             requested_user.followers.add(instance)
-    #             instance.following.add(requested_user)
-    #             instance.save()
-    #     else:
-    #         return redirect('accounts_login')
-
-
-
         
 
 
@@ -84,7 +67,6 @@ class UserProfileModel(models.Model):
     """ User Profile Model """
     user            = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name="user")
     followers       = models.ManyToManyField(User , related_name='followers_of_instance' , blank=True,)
-    
     dob             = models.DateField(null=True, blank=True, default=timezone.now())
     phone_no        = PhoneNumberField(null=True, blank=True)
     profession      = models.TextField(max_length=100, null=True, blank=True)
@@ -99,8 +81,7 @@ class UserProfileModel(models.Model):
     follower        = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE, null=True)
     following       = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE, null=True)
     tags            = models.CharField(choices=TAG_CHOICES, default='EN', max_length=3)
-    # tag             = models.CharField(choices=TAG_CHOICES, max_length='2', null=True, blank=True)
-    # location = models.PointField()
+    
 
     objects = UserProfileManager()
 
