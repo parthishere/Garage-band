@@ -30,21 +30,21 @@ def HomeView(request):
     }
     return render(request, 'portfolio/portfolio.html', context)
 
-    
+
 
 
 class SearchProfileView(ListView):
     template_name = 'portfolio/search-list.html'
     model=UserProfileModel
-    
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         request = self.request
         query = request.GET.get('q')
-        
+
         if query is not None:
             obj_list = (
-                Q(user__username__icontains=query) | Q(about__icontains=query) | Q(profession__icontains=query) | Q(softwear__icontains=query) | Q(awards__icontains=query)
+                Q(user__usesrname__icontains=query) | Q(about__icontains=query) | Q(profession__icontains=query) | Q(softwear__icontains=query) | Q(awards__icontains=query)
             )
             context['object_list'] = UserProfileModel.objects.filter(obj_list).distinct()
             context['query'] = query
@@ -52,26 +52,26 @@ class SearchProfileView(ListView):
         else:
             return UserProfileModel.get_featured_profile()
 
- 
+
 
 class ProfileDetailView(DetailView):
     model=UserProfileModel
     template_name= 'portfolio/profile-detail.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super(ProfileDetailView, self).get_context_data(**kwargs)
         context['qs'] = Questions.objects.filter(user=self.object.user)
         context['followers'] = Follow.objects.followers(self.object.user)
         context['following'] = Follow.objects.following(self.object.user)
         return context
-        
-        
+
+
 def list_of_friends(request, user):
     list_of_friends = Friend.objects.friends(user)
     list_of_followers = Follow.objects.followers(request.user)
     list_of_following = Follow.objects.following(request.user)
     context = {
-        'list': list_of_friends, 
+        'list': list_of_friends,
     }
     return reder(request, 'portfoilo/list-friend.html', context)
 
@@ -79,15 +79,15 @@ def list_of_friends(request, user):
 def add_follower_user(request, other_user_pk):
     #### Make request.user a follower of other_user:
     other_user = UserProfileModel.objects.get(pk=other_user_pk)
-    Follow.objects.add_follower(request.user, other_user.user)      
-    
+    Follow.objects.add_follower(request.user, other_user.user)
+
     return redirect(reverse('portfolio:detail', kwargs={'slug':other_user.slug}))
 
 @login_required
 def remove_follower_user(request, other_user_pk):
     other_user = UserProfileModel.objects.get(pk=other_user_pk)
     Follow.objects.remove_follower(request.user, other_user.user)
-    
+
     return redirect(reverse('portfolio:detail', kwargs={'pk':other_user_pk}))
 
 @login_required
@@ -96,7 +96,7 @@ def block_user(request, other_user_pk):
     other_user = UserProfileModel.objects.get(pk=other_user_pk)
     Block.objects.add_block(request.user, other_user.user)
     # context = {
-    #     'list': list_of_friends, 
+    #     'list': list_of_friends,
     # }
     return redirect(reverse('portfolio:detail', kwargs={'pk':other_user_pk}))
 
@@ -106,7 +106,7 @@ def unblock_user(request, other_user_pk):
     other_user = UserProfileModel.objects.get(pk=other_user_pk)
     Block.objects.remove_block(request.user, other_user.user)
     # context = {
-    #     'list': list_of_friends, 
+    #     'list': list_of_friends,
     # }
     return redirect(reverse('portfolio:detail', kwargs={'pk':other_user_pk}))
 

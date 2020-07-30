@@ -3,9 +3,10 @@ from .utils import unique_slug_generator
 from django.db.models.signals import pre_save
 from django.shortcuts import redirect
 from portfolio.models import UserProfileModel,User
+from django.urls import reverse
 
 TAG_CHOICES = [
-    ('EN', 'Entertainment'), 
+    ('EN', 'Entertainment'),
     ('EN2', 'Entertaintment 2'),
     ('EN3', 'Entertaintment 3'),
     ('EN4', 'Entertaintment 4'),
@@ -25,7 +26,7 @@ class Questions(models.Model):
     dislike_count   = models.IntegerField(default=0)
     time            = models.DateTimeField(auto_now_add=True)
     tags            = models.CharField(choices=TAG_CHOICES, max_length=3, default='EN')
-        
+
     def __str__(self):
         """ str method """
         pk=self.pk
@@ -33,7 +34,7 @@ class Questions(models.Model):
 
     def get_absolute_url(self):
         return reverse("questions:detail", kwargs={"pk": self.pk})
-    
+
 
 
 def questions_pre_save_receiver(sender,instance,*args,**kwargs):

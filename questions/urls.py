@@ -1,14 +1,14 @@
 from rest_framework import routers
 from django.urls import path
 from .views import (
-	QuestionCreate, 
-	QuestionDetailView, 
-	QuestionListView, 
-	upvote_create, 
-	downvote_create, 
+	QuestionCreate,
+	QuestionDetailView,
+	QuestionListView,
+	upvote_create,
+	downvote_create,
 	QuestionDeleteView,
 	QuestionUpdateView,
-	SearchQuestionView, 
+	SearchQuestionView,
 	question_downvote_create,
 	question_upvote_create
 )
@@ -29,6 +29,3 @@ urlpatterns = [
 	path('dislike/<pk>', question_downvote_create, name='question-dislike'),
 	path('search', SearchQuestionView.as_view(), name='search'),
 ]
-
-
-

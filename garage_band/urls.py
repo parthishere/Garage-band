@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
-
+from questions.views import SearchQuestionView
 
 
 urlpatterns = [
@@ -26,8 +26,9 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('accounts/', include('portfolio.urls', namespace='portfolio')),
     path('friendship/', include('friendship.urls')),
-    path('question/', include('questions.urls', namespace='questions')),
-    path('rest-auth/', include('rest_auth.urls')),  
+    path('questions/', include('questions.urls', namespace='questions')),
+    path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('answers/', include('answers.urls', namespace='answers'))
+    path('answers/', include('answers.urls', namespace='answers')),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
