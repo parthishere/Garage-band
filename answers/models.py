@@ -24,20 +24,25 @@ class AnswersManager(models.Manager):
 
 
 class Answers(models.Model):
-    user        = models.ForeignKey(User, on_delete=models.CASCADE,  blank=True ,null=True)
-    image       = models.ImageField(null=True,blank=True)
-    answer      = models.TextField(default='Enter Your Answer Here!')
-    slug        = models.SlugField(unique=True,blank=True,null=True)
-    question    = models.ForeignKey(Questions, on_delete=models.CASCADE, blank=True ,null=True)
-    like        = models.IntegerField(default=0)
-    dislike     = models.IntegerField(default=0)
-    time        =models.DateTimeField(auto_now_add=True)
+    user            = models.ForeignKey(User, on_delete=models.CASCADE,  blank=True ,null=True)
+    image           = models.ImageField(null=True,blank=True)
+    answer          = models.TextField(default='Enter Your Answer Here!')
+    slug            = models.SlugField(unique=True,blank=True,null=True)
+    question        = models.ForeignKey(Questions, on_delete=models.CASCADE, blank=True ,null=True)
+    like            = models.ManyToManyField(User, blank=True, related_name='answer_iked_user')
+    dislike         = models.ManyToManyField(User, blank=True, related_name='answer_disliked_user')
+    like_count      = models.IntegerField(default=0)
+    dislike_count   = models.IntegerField(default=0)
+    time            = models.DateTimeField(auto_now_add=True)
 
     objects = AnswersManager()
 
     def __str__(self):
         pk=self.pk
-        return str(pk)
+        return str(pk)  
+
+    def get_absolute_url(self):
+        return reverse("answers:detail", kwargs={"pk": self.pk})
     
      
 

@@ -54,19 +54,16 @@ class AnswerDetailView(DetailView, FormView):
   
 
 
-class AnswerDeleteView(DeleteView):
+class AnswerDeleteView(DeleteView, LoginRequiredMixin):
     model = Answers
     success_url = reverse_lazy('questions:list')
     template_name_suffix = '_confirm_delete'
 
-class AnswerUpdateView(UpdateView):
+class AnswerUpdateView(UpdateView, LoginRequiredMixin):
     model = Answers
     fields = ['answer', 'image']
     template_name_suffix = '_update_form'
     
     def get_success_url(self, *kwargs):
-        # pk = self.request.GET.get('pk')
-        # if pk is None:
-        #     pk = kwargs.get('pk')
         return reverse_lazy('answers:detail', kwargs = {'pk': self.object.pk})
     

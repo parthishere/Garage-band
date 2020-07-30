@@ -12,8 +12,15 @@
 </hr>
 {{ qs }}</br>
 {% for query in qs %}
-{{ query.question }}</br>
+<a href="{{ query.get_absolute_url }}">{{ query.question }}</br></a>
 {% endfor %}
+
+</hr>
+<br>
+{% for ans_q in answer_qs %}
+<a href="{{ ans_q.get_absolute_url }}">{{ ans_q.answer }}</br></a>
+{% endfor %}
+</hr>
 followers: {{ followers }}</br>
 following: {{ following }}</br>
 

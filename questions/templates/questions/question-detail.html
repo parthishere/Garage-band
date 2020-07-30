@@ -3,7 +3,16 @@
 
   {{ object.question }}
   {{ object.user }}</br>
- 
+ Total Likes of Question: {{ object.like_count }}</br>
+  Total Dislikes of Question: {{ object.dislike_count }}</br>
+  <form method="POST" action="{% url 'questions:question-like' object.pk %}">
+    {% csrf_token %}
+    <input type='submit' value='like'>
+  </form>
+  <form method="POST" action="{% url 'questions:question-dislike' object.pk %}">
+    {% csrf_token %}
+    <input type='submit' value='dislike'>
+  </form>
  
   <form method='POST'>
   {% csrf_token %}
@@ -24,7 +33,14 @@
           {{ answer.answer }}
            Total Likes : {{ answer.like_count }}</br>
   Total Dislikes : {{ answer.dislike_count }}</br>
-  <a href="{% url 'questions:like' answer.pk object.pk %}"> like </a></br>
+  <form method="POST" action="{% url 'questions:like' answer.pk object.pk %}">
+    {% csrf_token %}
+    <input type='submit' value='like'>
+  </form>
+  <form method="POST" action="{% url 'questions:dislike' answer.pk object.pk %}">
+    {% csrf_token %}
+    <input type='submit' value='dislike'>
+  </form>
 
         </div>
         <br>

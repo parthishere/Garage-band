@@ -17,6 +17,10 @@ from .utils import random_string_generator
 
 TAG_CHOICES = [
     ('EN', 'Entertainment'), 
+    ('EN2', 'Entertaintment 2'),
+    ('EN3', 'Entertaintment 3'),
+    ('EN4', 'Entertaintment 4'),
+    ('EN5', 'Entertaintment 5'),
 ]
 
 
@@ -78,11 +82,8 @@ class UserProfileModel(models.Model):
     video           = models.FileField(upload_to='work_video/'  ,validators=[validate_video_file_extension],null=True, blank=True)
     awards          = models.TextField(null=True, blank=True)
     slug            = models.SlugField(null=True, blank=True)
-    follower        = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE, null=True)
-    following       = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE, null=True)
     tags            = models.CharField(choices=TAG_CHOICES, default='EN', max_length=3)
-    # tag             = models.CharField(choices=TAG_CHOICES, max_length='2', null=True, blank=True)
-    # location = models.PointField()
+    
 
     objects = UserProfileManager()
 

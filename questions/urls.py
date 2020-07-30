@@ -8,6 +8,9 @@ from .views import (
 	downvote_create, 
 	QuestionDeleteView,
 	QuestionUpdateView,
+	SearchQuestionView, 
+	question_downvote_create,
+	question_upvote_create
 )
 
 app_name='questions'
@@ -22,6 +25,9 @@ urlpatterns = [
 	path('<pk>/', QuestionDetailView.as_view(), name='detail'),
 	path('like/<pk>/<q_pk>', upvote_create, name='like'),
 	path('dislike/<pk>/<q_pk>', downvote_create, name='dislike'),
+	path('like/<pk>', question_upvote_create, name='question-like'),
+	path('dislike/<pk>', question_downvote_create, name='question-dislike'),
+	path('search', SearchQuestionView.as_view(), name='search'),
 ]
 
 

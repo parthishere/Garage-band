@@ -19,5 +19,12 @@
 {% endfor %}</br>
 followers: {{ followers }}</br>
 following: {{ following }}</br>
+"
+{% comment %} <form method='POST' method="{% url 'portfolio:follow' object.user.pk %}">
+{% csrf_token %}
+<input type='submit' name='submit' value='follow'>
+</form> {% endcomment %}
+
+<a href="{% url 'portfolio:follow' object.user.pk %}"> follow </a>
 
 {% endblock %}
