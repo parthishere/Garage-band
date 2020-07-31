@@ -5,6 +5,8 @@
   {{ object.user }}</br>
  Total Likes of Question: {{ object.like_count }}</br>
   Total Dislikes of Question: {{ object.dislike_count }}</br>
+  <a href="{% url 'questions:save' object.pk %}">save question</a>
+  <hr>
   <form method="POST" action="{% url 'questions:question-like' object.pk %}">
     {% csrf_token %}
     <input type='submit' value='like'>

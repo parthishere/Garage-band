@@ -24,7 +24,13 @@ following: {{ following }}</br>
 {% csrf_token %}
 <input type='submit' name='submit' value='follow'>
 </form> {% endcomment %}
-
+{% if request.user in followers %}
+<a href="{% url 'portfolio:unfollow' object.user.pk %}"> unfollow </a>
+<a href="{% url 'portfolio:block' object.user.pk %}"> block </a>
+{% else %}
 <a href="{% url 'portfolio:follow' object.user.pk %}"> follow </a>
-
+{% endif %}
+{% if object.user in blocked %}
+<a href="{% url 'portfolio:unblock' object.user.pk %}"> Unblock </a>
+{% endif %}
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.db import models
 from .utils import unique_slug_generator
 from django.db.models.signals import pre_save
-from django.shortcuts import redirect
+from django.shortcuts import redirect, reverse
 from portfolio.models import UserProfileModel,User
 
 TAG_CHOICES = [
@@ -25,6 +25,9 @@ class Questions(models.Model):
     dislike_count   = models.IntegerField(default=0)
     time            = models.DateTimeField(auto_now_add=True)
     tags            = models.CharField(choices=TAG_CHOICES, max_length=3, default='EN')
+    draft           = models.BooleanField(default=False)
+    saved           = models.BooleanField(default=False)
+    # saved           = models.ManyToManyField(User, blank=True)
         
     def __str__(self):
         """ str method """
@@ -34,7 +37,9 @@ class Questions(models.Model):
     def get_absolute_url(self):
         return reverse("questions:detail", kwargs={"pk": self.pk})
     
-
+class SavedQuestion(models.Model):
+    question = models.ForeignKey(Questions, on_delete=models.CASCADE, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
 
 def questions_pre_save_receiver(sender,instance,*args,**kwargs):
     """ Signal """
