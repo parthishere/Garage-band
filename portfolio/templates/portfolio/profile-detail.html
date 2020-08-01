@@ -2,7 +2,9 @@
 {% extends 'base/base.html' %}
 
 {% block body_block %}
-
+{% comment %} {% if object.user in blocked %}
+abe apna kaam karna lehen ke bode
+{% else %} {% endcomment %}
 {{ object }} </br>
 {{ object.user }} </br>
 {{ object.user.email }} </br>
@@ -32,5 +34,6 @@ following: {{ following }}</br>
 {% endif %}
 {% if object.user in blocked %}
 <a href="{% url 'portfolio:unblock' object.user.pk %}"> Unblock </a>
+
 {% endif %}
 {% endblock %}

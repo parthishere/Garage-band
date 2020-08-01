@@ -15,7 +15,9 @@
     {% csrf_token %}
     <input type='submit' value='dislike'>
   </form>
- 
+ {% if object.draft %}
+
+ {% else %}
   <form method='POST'>
   {% csrf_token %}
   {{ form }}
@@ -52,10 +54,12 @@
   </ul>
 
     <p>There are no answers in the library.</p></br>
+    {% endif %}
 {% if request.user == object.user %}
 <a class='label-danger' href="{% url 'questions:delete' object.pk %}"> Delete !</a></br>
 <a class='label-info' href="{% url 'questions:update' object.pk %}"> update question</a></br>
 {% else %}
+
 {% endif %}
 {% endblock %}
 © 2020 GitHub, Inc.
