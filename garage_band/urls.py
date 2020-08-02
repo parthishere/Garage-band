@@ -27,7 +27,10 @@ urlpatterns = [
     path('accounts/', include('portfolio.urls', namespace='portfolio')),
     path('friendship/', include('friendship.urls')),
     path('question/', include('questions.urls', namespace='questions')),
-    path('rest-auth/', include('rest_auth.urls')),  
+    path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('answers/', include('answers.urls', namespace='answers'))
+    path('answers/', include('answers.urls', namespace='answers')),
+    path('api/questions/',include('questions.api.urls', namespace='api-questions')),
+    path('api/answers/',include('answers.api.urls', namespace='api-answers'))
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

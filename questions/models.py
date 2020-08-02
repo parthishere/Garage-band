@@ -5,7 +5,7 @@ from django.shortcuts import redirect, reverse
 from portfolio.models import UserProfileModel,User
 
 TAG_CHOICES = [
-    ('EN', 'Entertainment'), 
+    ('EN', 'Entertainment'),
     ('EN2', 'Entertaintment 2'),
     ('EN3', 'Entertaintment 3'),
     ('EN4', 'Entertaintment 4'),
@@ -28,15 +28,15 @@ class Questions(models.Model):
     draft           = models.BooleanField(default=False)
     saved           = models.BooleanField(default=False)
     # saved           = models.ManyToManyField(User, blank=True)
-        
+
     def __str__(self):
         """ str method """
         pk=self.pk
         return str(pk)
-
+    
     def get_absolute_url(self):
         return reverse("questions:detail", kwargs={"pk": self.pk})
-    
+
 class SavedQuestion(models.Model):
     question = models.ForeignKey(Questions, on_delete=models.CASCADE, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
