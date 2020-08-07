@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+{% block body_block %}
+     <div class="content">
+     <div class='container'>
+     <form class="form my-2 my-lg-0" method='GET' action='{% url "search:search-here" %}'>
+      <div class='input-group'>
+          <input class="form-control" type="search" name='q' placeholder="Search" aria-label="Search" value='{{ request.GET.q }}'>
+          <span class='insert-group-btn'>
+          <button class="btn btn-outline-success" type="submit">Search</button>
+          </span>
+      </div>
+      </form>
+      </div>
+     {{ objects_list }}
+       {% for question in objects_list %}
+       <a href="{% url 'questions:detail' question.pk %}">{{ question.question|safe }}</a>
+       <p>
+         {% if question.image %}
+            <img src="{{ question.image.url }}" class="img-fluid"/>
+         {% endif %}
+       </p>
+       {% endfor %}
+>>> Q by following
+{% for questions in questions_following %}
+{{ questions.question|safe }}
+by {{ question.user }}
+{% endfor %}
+
+
+       {% for q in questions %}
+       {{ q.question }}
+       {% endfor %}
+     </div>
+{% endblock %}

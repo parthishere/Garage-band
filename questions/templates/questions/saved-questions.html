@@ -1,0 +1,7 @@
+{% extends 'base/base.html' %}
+{% block body_block %}
+  {% for q in objects_list %}
+  <a href="{% url 'questions:detail' q.question.pk %}"> {{ q.question.question }} </a>
+
+  {% endfor %}
+{% endblock %}

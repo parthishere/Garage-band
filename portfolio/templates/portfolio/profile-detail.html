@@ -1,0 +1,52 @@
+
+{% extends 'base/base.html' %}
+{% load social_share %}
+{% block body_block %}
+{% comment %} {% if object.user in blocked %}
+abe apna kaam karna lehen ke bode
+{% else %} {% endcomment %}
+{{ object }} </br>
+{{ object.user }} </br>
+{{ object.user.email }} </br>
+{{ object.about }} </br>
+{{ object.softwear }} </br>
+
+</hr>
+
+</br>
+</hr>
+{{ qs }}</br>
+{% for query in qs %}
+{{ query.question }}</br>
+{% endfor %}</br>
+followers: {{ followers }}</br>
+following: {{ following }}</br>
+"
+{% comment %} <form method='POST' method="{% url 'portfolio:follow' object.user.pk %}">
+{% csrf_token %}
+<input type='submit' name='submit' value='follow'>
+</form> {% endcomment %}
+{% if request.user in followers %}
+<a href="{% url 'portfolio:unfollow' object.user.pk %}"> unfollow </a>
+<a href="{% url 'portfolio:block' object.user.pk %}"> block </a>
+{% else %}
+<a href="{% url 'portfolio:follow' object.user.pk %}"> follow </a>
+{% endif %}
+{% if object.user in blocked %}
+<a href="{% url 'portfolio:unblock' object.user.pk %}"> Unblock </a>
+
+{% endif %}
+{{ request.build_absolute_uri }}
+{% post_to_facebook object_or_url "Post To Facebook!" %}
+{% post_to_gplus "{{ request.build_absolute_uri }}" "Post To GPlus+" %}
+
+{% comment %} {% post_to_twitter <text_to_post> <object_or_url> <link_text> %}
+
+{% post_to_linkedin <object_or_url> %}
+
+{% post_to_reddit <text_to_post> <object_or_url> <link_text> %} {% endcomment %}
+
+
+{% post_to_whatsapp object_or_url "Post To Watsapp" %}
+
+{% endblock %}

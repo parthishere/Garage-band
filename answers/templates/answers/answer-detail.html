@@ -1,0 +1,42 @@
+{% extends 'base/base.html' %}
+{% block body_block %}
+
+  {{ object.answer }}
+  {{ object.user }}</br>
+ 
+ 
+  <form method='POST'>
+  {% csrf_token %}
+  {{ form }}
+  <input type='submit' name='submit' value='submit' class='btn btn-primary'>
+  </form>
+ <h1>Comments</h1>
+
+  <ul>
+
+    {% comment %} {% for comment in comments %}
+          {{ comment.user.username }}
+         
+      </div>
+          <hr></hr>
+        <div class="row text-dark">
+  
+           {{ comment.comment }}
+         
+  
+
+        </div>
+        <br>
+        <br>
+
+    {% endfor %} {% endcomment %}
+  </ul>
+
+    <p>There are no comments in the library.</p></br>
+{% if request.user == object.user %}
+<a class='label-danger' href="{% url 'answers:delete' object.pk %}"> Delete !</a></br>
+<a class='label-info' href="{% url 'answers:update' object.pk %}"> update answer</a></br>
+{% else %}
+{% endif %}
+{% endblock %}
+© 2020 GitHub, Inc.

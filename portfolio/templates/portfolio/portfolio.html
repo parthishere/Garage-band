@@ -1,0 +1,31 @@
+{% extends 'base/base.html' %}
+{% block body_block %}
+
+
+{{ user }} </br>
+{{ user.user }} </br>
+{{ user.user.email }} </br>
+{{ user.about }} </br>
+{{ user.softwear }} </br>
+</br>
+</hr>
+{% if qs %}
+{{ qs }}</br>
+{% for query in qs %}
+<a href="{{ query.get_absolute_url }}">{{ query.question }}</br></a>
+{% endfor %}
+{% endif %}
+
+</hr>
+<br>
+{% if ans_q %}
+{% for ans_q in answer_qs %}
+<a href="{{ ans_q.get_absolute_url }}">{{ ans_q.answer }}</br></a>
+{% endfor %}
+{% endif %}
+</hr>
+followers: {{ followers }}</br>
+following: {{ following }}</br>
+
+
+{% endblock %}

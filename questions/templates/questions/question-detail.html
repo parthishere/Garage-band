@@ -1,0 +1,69 @@
+{% extends 'base/base.html' %}
+{% block body_block %}
+
+  {{ object.question|safe }}
+  {{ object.user }}</br>
+ Total Likes of Question: {{ object.like_count }}</br>
+  Total Dislikes of Question: {{ object.dislike_count }}</br>
+  <a href="{% url 'questions:save' object.pk %}">save question</a>
+  <hr>
+  <form method="POST" action="{% url 'questions:question-like' object.pk %}">
+    {% csrf_token %}
+    <input type='submit' value='like'>
+  </form>
+  <form method="POST" action="{% url 'questions:question-dislike' object.pk %}">
+    {% csrf_token %}
+    <input type='submit' value='dislike'>
+  </form>
+  <hr>
+ {% if object.draft %}
+
+ {% else %}
+  <form method='POST'>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type='submit' name='submit' value='submit' class='btn btn-primary'>
+  </form>
+  <hr>
+  <br>
+ <h1>answer List</h1>
+
+  <ul>
+
+    {% for answer in answers %}
+         {{ answer.user }}
+         
+      </div>
+          <hr></hr>
+        <div class="row text-dark">
+      <a href="{% url 'answers:detail' answer.pk %}">
+          {{ answer.answer|safe }}
+          </a>
+           Total Likes : {{ answer.like_count }}</br>
+  Total Dislikes : {{ answer.dislike_count }}</br>
+  <form method="POST" action="{% url 'questions:like' answer.pk object.pk %}">
+    {% csrf_token %}
+    <input type='submit' value='like'>
+  </form>
+  <form method="POST" action="{% url 'questions:dislike' answer.pk object.pk %}">
+    {% csrf_token %}
+    <input type='submit' value='dislike'>
+  </form>
+
+        </div>
+        <br>
+        <br>
+
+    {% endfor %}
+  </ul>
+
+    <p>There are no answers in the library.</p></br>
+    {% endif %}
+{% if request.user == object.user %}
+<a class='label-danger' href="{% url 'questions:delete' object.pk %}"> Delete !</a></br>
+<a class='label-info' href="{% url 'questions:update' object.pk %}"> update question</a></br>
+{% else %}
+
+{% endif %}
+{% endblock %}
+© 2020 GitHub, Inc.
